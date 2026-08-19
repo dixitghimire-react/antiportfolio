@@ -34,13 +34,28 @@ const Home = () => {
   const audioRef = React.useRef(null);
 
   useEffect(() => {
-    // Attempt to play music when component mounts
-    if (audioRef.current) {
-      audioRef.current.volume = 1.0; // Max volume
-      audioRef.current.play().catch(error => {
-        console.log("Autoplay prevented by browser. User interaction needed:", error);
-      });
-    }
+    const playAudio = () => {
+      if (audioRef.current && audioRef.current.paused) {
+        audioRef.current.volume = 1.0;
+        audioRef.current.play().catch(error => {
+          console.log("Autoplay prevented by browser. User interaction needed:", error);
+        });
+      }
+    };
+
+    // Attempt to play immediately (will likely fail on first load)
+    playAudio();
+
+    // Listen for any interaction to start the music
+    window.addEventListener('click', playAudio, { once: true });
+    window.addEventListener('scroll', playAudio, { once: true });
+    window.addEventListener('keydown', playAudio, { once: true });
+
+    return () => {
+      window.removeEventListener('click', playAudio);
+      window.removeEventListener('scroll', playAudio);
+      window.removeEventListener('keydown', playAudio);
+    };
   }, []);
 
   const projects = [
