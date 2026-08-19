@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Writing from './pages/Writing';
+import EnterScreen from './components/EnterScreen';
 
 const AppContent = () => {
+  const [hasEntered, setHasEntered] = React.useState(false);
   const location = useLocation();
 
   const [isDark, setIsDark] = React.useState(() => {
@@ -30,13 +32,17 @@ const AppContent = () => {
   const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <div className="min-h-screen dark:bg-[#121826] bg-gray-50 transition-colors duration-300">
-      <Navbar toggleTheme={toggleTheme} isDark={isDark} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/writing" element={<Writing />} />
-      </Routes>
-    </div>
+    <>
+      {!hasEntered && <EnterScreen onEnter={() => setHasEntered(true)} />}
+      
+      <div className={`min-h-screen dark:bg-[#121826] bg-gray-50 transition-colors duration-300 ${!hasEntered ? 'hidden' : 'block'}`}>
+        <Navbar toggleTheme={toggleTheme} isDark={isDark} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/writing" element={<Writing />} />
+        </Routes>
+      </div>
+    </>
   );
 };
 
