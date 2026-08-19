@@ -168,7 +168,7 @@ Well, obviously in my dreams`
 
 
       <div className="text-center mb-10 mt-8">
-        <h1 className="text-6xl md:text-8xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-purple-500 font-mono tracking-wide h-20 md:h-32 flex items-center justify-center">
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-purple-500 font-mono tracking-wide h-12 md:h-16 flex items-center justify-center">
           <Typewriter text="Poetry Writer" speed={120} />
         </h1>
         <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 italic font-serif">
