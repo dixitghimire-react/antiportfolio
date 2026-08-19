@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 transition-colors duration-300;
+  }
+  
+  html.dark body {
+    @apply bg-dark-900 text-gray-100;
+  }
+}
+
+@layer utilities {
+  .neon-glow-cyan {
+    box-shadow: 0 0 10px theme('colors.neon.cyan'), 
+                0 0 20px theme('colors.neon.cyan'), 
+                0 0 40px theme('colors.neon.cyan');
+  }
+  
+  .neon-glow-purple {
+    box-shadow: 0 0 10px theme('colors.neon.purple'), 
+                0 0 20px theme('colors.neon.purple'), 
+                0 0 40px theme('colors.neon.purple');
+  }
+
+  .neon-glow-pink {
+    box-shadow: 0 0 10px theme('colors.neon.pink'), 
+                0 0 20px theme('colors.neon.pink'), 
+                0 0 40px theme('colors.neon.pink');
+  }
+
+  /* Text neon glow */
+  .neon-text-cyan {
+    text-shadow: 0 0 5px theme('colors.neon.cyan'), 
+                 0 0 10px theme('colors.neon.cyan'), 
+                 0 0 20px theme('colors.neon.cyan');
+  }
+  
+  .neon-text-purple {
+    text-shadow: 0 0 5px theme('colors.neon.purple'), 
+                 0 0 10px theme('colors.neon.purple'), 
+                 0 0 20px theme('colors.neon.purple');
+  }
+
+  .neon-text-pink {
+    text-shadow: 0 0 5px theme('colors.neon.pink'), 
+                 0 0 10px theme('colors.neon.pink'), 
+                 0 0 20px theme('colors.neon.pink');
+  }
+
+  /* Card and button hover interactions */
+  .hover-neon-card {
+    @apply transition-all duration-300 border border-transparent;
+  }
+
+  .hover-neon-card:hover {
+    @apply border-neon-cyan transform -translate-y-1;
+    box-shadow: 0 0 15px theme('colors.neon.cyan'), 
+                0 0 30px theme('colors.neon.cyan');
+  }
+  
+  html.dark .hover-neon-card:hover {
+    box-shadow: 0 0 20px theme('colors.neon.cyan'), 
+                0 0 40px theme('colors.neon.cyan');
+  }
+
+  .hover-neon-button {
+    @apply transition-all duration-300 bg-transparent border-2 border-neon-purple text-neon-purple font-bold rounded-lg;
+  }
+
+  .hover-neon-button:hover {
+    @apply bg-neon-purple text-white;
+    box-shadow: 0 0 15px theme('colors.neon.purple'), 
+                0 0 30px theme('colors.neon.purple');
+  }
+  
+  /* Icon glow on hover */
+  .hover-neon-icon {
+    @apply transition-all duration-300;
+  }
+  
+  .hover-neon-icon:hover {
+    @apply text-neon-pink transform scale-110;
+    filter: drop-shadow(0 0 10px theme('colors.neon.pink'));
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+  html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-700;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+  html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-600;
+  }
+}
+
