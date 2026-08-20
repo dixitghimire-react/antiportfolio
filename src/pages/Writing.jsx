@@ -63,6 +63,37 @@ const Writing = () => {
     };
   }, []);
 
+  const openPoem = (poem) => {
+    setActivePoem(poem);
+    if (window.location.hash !== '#poem') {
+      window.history.pushState(null, '', window.location.pathname + '#poem');
+    }
+  };
+
+  const closePoem = () => {
+    if (window.location.hash === '#poem') {
+      window.history.back();
+    } else {
+      setActivePoem(null);
+    }
+  };
+
+  useEffect(() => {
+    // Cleanup hash on mount if user reloaded the page with it
+    if (window.location.hash === '#poem') {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+
+    const handlePopState = () => {
+      if (window.location.hash !== '#poem') {
+        setActivePoem(null);
+      }
+    };
+    
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const poems = [
     {
       title: "Let's meet again as stranger",
@@ -215,7 +246,7 @@ Well, obviously in my dreams`
             </div>
             
             <button 
-              onClick={() => setActivePoem(poem)}
+              onClick={() => openPoem(poem)}
               className="mt-auto flex items-center justify-center w-full py-3 rounded-lg bg-gray-100 dark:bg-dark-700 hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors text-gray-800 dark:text-gray-200 group"
             >
               <BookOpen className="mr-2 group-hover:scale-110 transition-transform" size={18} />
@@ -227,13 +258,16 @@ Well, obviously in my dreams`
 
       {/* Poetry Modal */}
       {activePoem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+          onClick={closePoem}
+        >
           <div 
             className="bg-white dark:bg-dark-900 w-full max-w-5xl max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative animate-in fade-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             <button 
-              onClick={() => setActivePoem(null)}
+              onClick={closePoem}
               className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/20 hover:bg-black/40 text-white backdrop-blur-md transition-all"
             >
               <X size={24} />
