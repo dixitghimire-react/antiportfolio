@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaEnvelope, FaExternalLinkAlt } from 'react-icons/fa';
 
 const Typewriter = ({ text, speed = 100 }) => {
   const [displayedText, setDisplayedText] = useState('');
@@ -58,20 +58,38 @@ const Home = () => {
     };
   }, []);
 
-  const projects = [
+  const featuredProject = {
+    title: "Nepal Yatra",
+    subtitle: "Himalayan Travel Guide & Itinerary Planner",
+    description: "Built an interactive Himalayan travel guide & itinerary planner using Next.js 15 (App Router), React 19, and TypeScript, serving structured guides for 19+ Nepalese destinations.",
+    highlights: [
+      "Integrated dynamic Leaflet GIS maps with custom category-coded div-markers, animated radar pulses, and coordinate-based viewport panning.",
+      "Developed a multi-day itinerary planner and real-time budget calculator, supporting customizable traveler counts, travel tiers, and print/PDF export features.",
+      "Implemented a global wishlist drawer using React Context and LocalStorage, providing offline persistence and automatic trip duration calculations.",
+      "Crafted responsive, high-performance UI components using Tailwind CSS, Framer Motion, and GSAP, achieving fluid animations and modern glassmorphic styling."
+    ],
+    tags: ["Next.js 15", "React 19", "TypeScript", "Leaflet GIS", "Tailwind CSS", "Framer Motion", "GSAP"],
+    liveUrl: "https://nepal-yatra-peach.vercel.app",
+    githubUrl: "https://github.com/dixitghimire-react/nepal"
+  };
+
+  const otherProjects = [
     {
       title: "Tic Tac Toe",
       description: "Tic Tac Toe is a two-player game with sleek UI and smooth animations.",
+      tags: ["React", "JavaScript", "CSS3"],
       link: "https://github.com/dixitghimire-react/tic-tac-toe"
     },
     {
       title: "Flappy Bird",
       description: "Flappy Bird is a fun project I tried out during my initial days of Software Engineering. It is a clone of our favourite game Flappy Bird.",
+      tags: ["JavaScript", "HTML5 Canvas", "Game Dev"],
       link: "https://github.com/dixitghimire-react/flappy-bird"
     },
     {
       title: "To-Do List",
       description: "Smart task manager with local storage and dark mode.",
+      tags: ["React", "LocalStorage", "Tailwind CSS"],
       link: "https://github.com/dixitghimire-react/to-do-list"
     }
   ];
@@ -80,9 +98,11 @@ const Home = () => {
     { name: 'HTML', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg' },
     { name: 'CSS', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg' },
     { name: 'JavaScript', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
-    { name: 'Java', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
+    { name: 'TypeScript', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
     { name: 'React.js', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
     { name: 'Next.js', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg' },
+    { name: 'Tailwind CSS', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg' },
+    { name: 'Java', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
     { name: 'Python', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' }
   ];
 
@@ -170,30 +190,130 @@ const Home = () => {
 
       {/* 4. Projects Section */}
       <section id="projects" className="w-full py-20 dark:bg-[#1a2333] bg-white border-t dark:border-gray-800 border-gray-200 flex flex-col items-center px-4">
-        <h2 className="text-3xl font-bold mb-12 text-center dark:text-white text-gray-900">Projects</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full">
-          {projects.map((project, index) => (
-            <a 
-              key={index} 
-              href={project.link} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="group block p-6 rounded-lg dark:bg-[#121826] bg-gray-50 border dark:border-gray-800 border-gray-200 hover:border-blue-500 transition-colors shadow-lg flex flex-col h-full"
-            >
-              <div className="flex-grow">
-                <h3 className="text-xl font-bold dark:text-gray-200 text-gray-800 mb-3 group-hover:text-blue-400 transition-colors">
-                  {project.title}
+        <div className="max-w-6xl w-full">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold dark:text-white text-gray-900 mb-3">Featured Projects</h2>
+            <p className="dark:text-gray-400 text-gray-600 text-sm md:text-base max-w-xl mx-auto">
+              A curated collection of web applications, interactive tools, and experimental projects I've built.
+            </p>
+          </div>
+          
+          {/* Main Featured Project: Nepal Yatra */}
+          <div className="mb-12 rounded-2xl dark:bg-[#121826] bg-gray-50 border-2 dark:border-blue-500/40 border-blue-500/30 p-6 md:p-8 shadow-2xl relative overflow-hidden group hover:border-blue-500 transition-all duration-300">
+            {/* Ambient decorative glow */}
+            <div className="absolute -top-24 -right-24 w-60 h-60 bg-blue-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-blue-500/20 transition-all duration-500"></div>
+            
+            <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-6">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold uppercase tracking-wider mb-3">
+                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                  Flagship Project
+                </div>
+                <h3 className="text-2xl md:text-3xl font-extrabold dark:text-white text-gray-900 group-hover:text-blue-400 transition-colors">
+                  {featuredProject.title}
                 </h3>
-                <p className="dark:text-gray-400 text-gray-600 text-sm leading-relaxed mb-6">
-                  {project.description}
+                <p className="text-blue-500 dark:text-blue-400 font-medium text-sm md:text-base mt-1">
+                  {featuredProject.subtitle}
                 </p>
               </div>
-              <div className="mt-auto flex items-center text-blue-500 text-sm font-medium">
-                <FaGithub size={16} className="mr-2" /> View Repository
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3">
+                <a 
+                  href={featuredProject.liveUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(37,99,235,0.6)] transition-all transform hover:-translate-y-0.5"
+                >
+                  <FaExternalLinkAlt size={13} />
+                  <span>Live Preview</span>
+                </a>
+                <a 
+                  href={featuredProject.githubUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 dark:bg-[#1a2333] bg-white border dark:border-gray-700 border-gray-300 hover:border-blue-500 dark:text-gray-200 text-gray-800 hover:text-blue-400 text-sm font-semibold rounded-lg transition-all transform hover:-translate-y-0.5"
+                >
+                  <FaGithub size={16} />
+                  <span>Source Code</span>
+                </a>
               </div>
-            </a>
-          ))}
+            </div>
+
+            {/* Description */}
+            <p className="dark:text-gray-300 text-gray-700 text-sm md:text-base leading-relaxed mb-6 font-normal">
+              {featuredProject.description}
+            </p>
+
+            {/* Highlights Bullet List */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+              {featuredProject.highlights.map((item, idx) => (
+                <div key={idx} className="flex items-start gap-2.5 p-3 rounded-lg dark:bg-[#1a2333]/70 bg-white/80 border dark:border-gray-800 border-gray-200 text-xs md:text-sm dark:text-gray-300 text-gray-700">
+                  <span className="text-blue-400 font-bold mt-0.5">✦</span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Tech Tags */}
+            <div className="flex flex-wrap gap-2 pt-2 border-t dark:border-gray-800/80 border-gray-200">
+              {featuredProject.tags.map((tag) => (
+                <span 
+                  key={tag} 
+                  className="px-3 py-1 text-xs font-medium rounded-md dark:bg-[#1a2333] bg-gray-200/70 text-blue-400 border dark:border-blue-500/20 border-blue-500/10"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Other Projects Grid */}
+          <div className="mb-4">
+            <h3 className="text-xl font-bold dark:text-gray-200 text-gray-800 mb-6">More Projects</h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {otherProjects.map((project, index) => (
+              <div 
+                key={index} 
+                className="group p-6 rounded-xl dark:bg-[#121826] bg-gray-50 border dark:border-gray-800 border-gray-200 hover:border-blue-500 transition-all duration-300 shadow-lg flex flex-col justify-between h-full hover:-translate-y-1"
+              >
+                <div>
+                  <h4 className="text-lg font-bold dark:text-gray-200 text-gray-800 mb-2 group-hover:text-blue-400 transition-colors">
+                    {project.title}
+                  </h4>
+                  <p className="dark:text-gray-400 text-gray-600 text-sm leading-relaxed mb-4">
+                    {project.description}
+                  </p>
+                  
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {project.tags.map((tag) => (
+                      <span 
+                        key={tag} 
+                        className="px-2.5 py-0.5 text-xs rounded dark:bg-[#1a2333] bg-gray-200/60 dark:text-gray-400 text-gray-600 border dark:border-gray-700/50 border-gray-300"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t dark:border-gray-800/80 border-gray-200 flex items-center justify-between">
+                  <a 
+                    href={project.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-blue-500 hover:text-blue-400 text-xs font-semibold gap-1.5 transition-colors"
+                  >
+                    <FaGithub size={14} />
+                    <span>View Repository</span>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

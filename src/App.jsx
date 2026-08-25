@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Writing from './pages/Writing';
@@ -7,7 +7,6 @@ import EnterScreen from './components/EnterScreen';
 
 const AppContent = () => {
   const [hasEntered, setHasEntered] = React.useState(false);
-  const location = useLocation();
 
   const [isDark, setIsDark] = React.useState(() => {
     if (typeof window !== 'undefined') {

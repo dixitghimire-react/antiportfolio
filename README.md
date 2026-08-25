@@ -1,16 +1,28 @@
-# React + Vite
+# Dikshit Ghimire - Antiportfolio 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A modern, responsive, and aesthetic developer portfolio showcasing full-stack projects, writings, education, and technical expertise.
 
-Currently, two official plugins are available:
+## 🌟 Featured Project: Nepal Yatra
+**Himalayan Travel Guide & Itinerary Planner**
+- **Live Website**: [nepal-yatra-peach.vercel.app](https://nepal-yatra-peach.vercel.app)
+- **GitHub Repository**: [github.com/dixitghimire-react/nepal](https://github.com/dixitghimire-react/nepal)
+- **Tech Stack**: Next.js 15 (App Router), React 19, TypeScript, Leaflet GIS, Tailwind CSS, Framer Motion, GSAP.
+- **Key Features**:
+  - Interactive Himalayan travel guide serving structured guides for 19+ Nepalese destinations.
+  - Dynamic Leaflet GIS maps with custom category-coded div-markers and animated radar pulses.
+  - Multi-day itinerary planner and real-time budget calculator with PDF export.
+  - Global wishlist drawer with React Context and LocalStorage offline persistence.
+  - Responsive, high-performance glassmorphic UI with smooth animations.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠️ More Projects
+- **Tic Tac Toe**: Two-player game with sleek UI and smooth animations. ([GitHub](https://github.com/dixitghimire-react/tic-tac-toe))
+- **Flappy Bird**: Classic arcade game clone built during early SE journey. ([GitHub](https://github.com/dixitghimire-react/flappy-bird))
+- **To-Do List**: Smart task manager with local storage and dark mode. ([GitHub](https://github.com/dixitghimire-react/to-do-list))
 
-## React Compiler
+## 💻 Tech Stack
+- **Languages & Frameworks**: HTML5, CSS3, JavaScript (ES6+), TypeScript, React.js, Next.js, Java, Python
+- **Styling & UI**: Tailwind CSS, Framer Motion, GSAP
+- **Tooling**: Vite, Oxlint, Git / GitHub
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+---
+© Dikshit Ghimire. All rights reserved.
