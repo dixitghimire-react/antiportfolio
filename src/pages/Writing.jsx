@@ -310,14 +310,16 @@ Well, obviously in my dreams`
               poem.pinned ? 'border-2 border-pink-500/40 dark:border-purple-500/40 ring-2 ring-pink-500/20 dark:ring-purple-500/20' : ''
             }`}
           >
+            {poem.pinned && (
+              <div 
+                className="absolute top-4 right-4 p-2 rounded-full bg-pink-500/10 dark:bg-purple-500/20 text-pink-500 dark:text-purple-400 border border-pink-500/30 dark:border-purple-500/40 shadow-sm"
+                title="Pinned"
+              >
+                <Pin size={16} className="rotate-45" />
+              </div>
+            )}
             <div>
-              {poem.pinned && (
-                <div className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-gradient-to-r from-pink-500/10 to-purple-500/10 text-pink-500 dark:text-pink-400 border border-pink-500/30 w-fit mx-auto mb-3 shadow-sm">
-                  <Pin size={12} className="rotate-45" />
-                  <span>Pinned Poem</span>
-                </div>
-              )}
-              <h2 className="text-2xl font-bold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-purple-500">
+              <h2 className="text-2xl font-bold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-purple-500 pr-6 pl-6">
                 {poem.title}
               </h2>
               <div className="h-32 overflow-hidden relative mb-6">
@@ -367,9 +369,11 @@ Well, obviously in my dreams`
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-8">
                      {activePoem.pinned && (
-                       <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/30 text-pink-200 border border-pink-400/40 text-xs font-semibold backdrop-blur-md mb-2 w-fit">
-                         <Pin size={12} className="rotate-45" />
-                         <span>Pinned</span>
+                       <div 
+                         className="absolute top-4 left-4 p-2 rounded-full bg-black/40 text-pink-400 border border-pink-500/30 backdrop-blur-md shadow-sm"
+                         title="Pinned"
+                       >
+                         <Pin size={16} className="rotate-45" />
                        </div>
                      )}
                      <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 font-serif italic">
@@ -378,11 +382,13 @@ Well, obviously in my dreams`
                   </div>
                 </>
               ) : (
-                <div className="w-full h-full min-h-[300px] bg-gradient-to-br from-purple-900 to-black flex flex-col items-center justify-center p-8 border-b md:border-b-0 md:border-r border-dark-700">
+                <div className="w-full h-full min-h-[300px] bg-gradient-to-br from-purple-900 to-black flex flex-col items-center justify-center p-8 border-b md:border-b-0 md:border-r border-dark-700 relative">
                   {activePoem.pinned && (
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/30 text-pink-200 border border-pink-400/40 text-xs font-semibold backdrop-blur-md mb-3">
-                      <Pin size={12} className="rotate-45" />
-                      <span>Pinned</span>
+                    <div 
+                      className="absolute top-4 left-4 p-2 rounded-full bg-white/10 text-pink-400 border border-pink-500/30 backdrop-blur-md shadow-sm"
+                      title="Pinned"
+                    >
+                      <Pin size={16} className="rotate-45" />
                     </div>
                   )}
                   <h2 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 text-center font-serif italic">
