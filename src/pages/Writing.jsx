@@ -97,7 +97,7 @@ const Writing = () => {
     {
       title: "Everything I Never Told You",
       pinned: true,
-      image: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&q=80&w=800",
+      image: "",
       content: `I don't think you ever knew
 how much I cared about you.
 Maybe you noticed sometimes,
