@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, BookOpen } from 'lucide-react';
+import { X, BookOpen, Pin } from 'lucide-react';
 
 const Typewriter = ({ text, speed = 100 }) => {
   const [displayedText, setDisplayedText] = useState('');
@@ -94,6 +94,82 @@ const Writing = () => {
   }, []);
 
   const poems = [
+    {
+      title: "Everything I Never Told You",
+      pinned: true,
+      image: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&q=80&w=800",
+      content: `I don't think you ever knew
+how much I cared about you.
+Maybe you noticed sometimes,
+the way I looked at you,
+the way I always found some reason
+to talk to you.
+
+I was scared.
+Scared that if I told you how I felt,
+things between us would change.
+So I stayed quiet and watched you live your life
+while I secretly wished
+I had a place in it.
+I learned your favorite songs,
+remembered the little things
+the way you smiled when you were happy,
+the way you went quiet when you weren't.
+
+You became a habit
+I never meant to keep,
+a name in my thoughts,
+a face in my dreams,
+a story I kept writing
+without knowing the ending.
+There were days when one small message from you
+could make my whole day better,
+and nights when I kept checking my phone,
+knowing you probably weren't going to text.
+
+You never promised me anything,
+yet somehow I kept hoping.
+Maybe that was my mistake
+building a home inside a heart
+that was never mine.
+Maybe someday I will stop looking for you
+in every song,
+stop remembering the little things about you,
+and learn how to hear your name
+without feeling something inside my chest.
+
+But I don't think I will ever stop loving you.
+And no I don't want someone else.
+I don't want a different person
+just to fill the space you left behind.
+I will keep choosing you,
+even if you never choose me.
+And I don't regret the love I gave you
+just because it was never returned.
+
+If one day you wonder
+whether someone ever truly loved you
+without asking for anything,
+without expecting anything,
+I hope you remember me
+the person who stayed quiet,
+who cared from a distance,
+who smiled when you were happy,
+even when your happiness
+had nothing to do with them.
+
+I will carry this love somewhere inside me,
+not because I expect anything from you
+or wish things were different,
+but because some feelings don't disappear
+just because they were never returned.
+Maybe you never knew how much I loved you,
+maybe you never will.
+But I did,
+and for a while,
+loving you was the most beautiful feeling
+I had ever known.`
+    },
     {
       title: "Let's meet again as stranger",
       image: "/haha.jpg",
@@ -230,9 +306,17 @@ Well, obviously in my dreams`
         {poems.map((poem, index) => (
           <article 
             key={index} 
-            className="p-8 rounded-2xl bg-white dark:bg-dark-800 shadow-xl dark:shadow-none hover-neon-card transition-all duration-500 flex flex-col justify-between h-full"
+            className={`p-8 rounded-2xl bg-white dark:bg-dark-800 shadow-xl dark:shadow-none hover-neon-card transition-all duration-500 flex flex-col justify-between h-full relative ${
+              poem.pinned ? 'border-2 border-pink-500/40 dark:border-purple-500/40 ring-2 ring-pink-500/20 dark:ring-purple-500/20' : ''
+            }`}
           >
             <div>
+              {poem.pinned && (
+                <div className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-gradient-to-r from-pink-500/10 to-purple-500/10 text-pink-500 dark:text-pink-400 border border-pink-500/30 w-fit mx-auto mb-3 shadow-sm">
+                  <Pin size={12} className="rotate-45" />
+                  <span>Pinned Poem</span>
+                </div>
+              )}
               <h2 className="text-2xl font-bold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-purple-500">
                 {poem.title}
               </h2>
@@ -281,14 +365,26 @@ Well, obviously in my dreams`
                     alt={activePoem.title} 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-8">
+                     {activePoem.pinned && (
+                       <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/30 text-pink-200 border border-pink-400/40 text-xs font-semibold backdrop-blur-md mb-2 w-fit">
+                         <Pin size={12} className="rotate-45" />
+                         <span>Pinned</span>
+                       </div>
+                     )}
                      <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 font-serif italic">
                       {activePoem.title}
                      </h2>
                   </div>
                 </>
               ) : (
-                <div className="w-full h-full min-h-[300px] bg-gradient-to-br from-purple-900 to-black flex items-center justify-center p-8 border-b md:border-b-0 md:border-r border-dark-700">
+                <div className="w-full h-full min-h-[300px] bg-gradient-to-br from-purple-900 to-black flex flex-col items-center justify-center p-8 border-b md:border-b-0 md:border-r border-dark-700">
+                  {activePoem.pinned && (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/30 text-pink-200 border border-pink-400/40 text-xs font-semibold backdrop-blur-md mb-3">
+                      <Pin size={12} className="rotate-45" />
+                      <span>Pinned</span>
+                    </div>
+                  )}
                   <h2 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 text-center font-serif italic">
                     {activePoem.title}
                   </h2>
