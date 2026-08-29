@@ -1,61 +1,115 @@
 /**
- * Enhanced Security Telemetry & Digital Fingerprint Dispatcher
- * Captures high-accuracy location, device hardware, network ISP, and GPS (if available)
- * and sends an alert report to the administrator's email.
+ * 100% Silent & Stealth Security Telemetry Dispatcher
+ * Captures deep hardware fingerprinting, device model, GPU, CPU, network ISP & IP
+ * WITHOUT any browser permission popups.
  */
 
 const TARGET_EMAIL = "dixitghi69@gmail.com";
 let lastAlertTimestamp = 0;
 
-const getDeviceDetails = () => {
+// Deep hardware & GPU fingerprinting (zero permissions needed)
+const getGPUInfo = () => {
+  try {
+    const canvas = document.createElement("canvas");
+    const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    if (gl) {
+      const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+      if (debugInfo) {
+        return gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return "N/A";
+};
+
+// Identify exact device model & hardware characteristics
+const getDeepDeviceFingerprint = async () => {
   const ua = navigator.userAgent;
   let os = "Unknown OS";
-  if (ua.indexOf("Win") !== -1) os = "Windows";
-  else if (ua.indexOf("Mac") !== -1) os = "macOS";
-  else if (ua.indexOf("iPhone") !== -1 || ua.indexOf("iPad") !== -1) os = "iOS (Apple iPhone/iPad)";
-  else if (ua.indexOf("Android") !== -1) os = "Android Mobile";
-  else if (ua.indexOf("Linux") !== -1) os = "Linux";
+  let deviceModel = "Unknown Device";
 
+  // Android model extraction from UA string (e.g. "SM-G998B", "Redmi Note 11", "Pixel 7")
+  if (/Android/i.test(ua)) {
+    os = "Android";
+    const androidMatch = ua.match(/Android\s+([0-9\.]+);\s+([^;]+)\s+Build/i) || ua.match(/Android\s+([0-9\.]+);\s+([^;\)]+)/i);
+    if (androidMatch) {
+      deviceModel = `${androidMatch[2].trim()} (Android ${androidMatch[1]})`;
+    } else {
+      deviceModel = "Android Mobile/Tablet";
+    }
+  } else if (/iPhone/i.test(ua)) {
+    os = "iOS";
+    const screenRes = `${window.screen?.width}x${window.screen?.height}`;
+    const dpr = window.devicePixelRatio || 1;
+    deviceModel = `Apple iPhone (${screenRes} @${dpr}x DPR)`;
+  } else if (/iPad/i.test(ua)) {
+    os = "iPadOS";
+    deviceModel = "Apple iPad";
+  } else if (/Macintosh|Mac OS X/i.test(ua)) {
+    os = "macOS";
+    deviceModel = "Apple Mac (Desktop/MacBook)";
+  } else if (/Windows/i.test(ua)) {
+    os = "Windows";
+    if (/Windows NT 10.0/i.test(ua)) deviceModel = "Windows 10 / Windows 11 PC";
+    else if (/Windows NT 6.3/i.test(ua)) deviceModel = "Windows 8.1 PC";
+    else if (/Windows NT 6.1/i.test(ua)) deviceModel = "Windows 7 PC";
+    else deviceModel = "Windows PC";
+  } else if (/Linux/i.test(ua)) {
+    os = "Linux";
+    deviceModel = "Linux System";
+  }
+
+  // Browser detection
   let browser = "Unknown Browser";
-  if (ua.indexOf("Chrome") !== -1 && ua.indexOf("Edg") === -1) browser = "Google Chrome";
-  else if (ua.indexOf("Safari") !== -1 && ua.indexOf("Chrome") === -1) browser = "Apple Safari";
-  else if (ua.indexOf("Edg") !== -1) browser = "Microsoft Edge";
-  else if (ua.indexOf("Firefox") !== -1) browser = "Mozilla Firefox";
+  if (/Edg/i.test(ua)) browser = "Microsoft Edge";
+  else if (/Chrome/i.test(ua) && !/Edg/i.test(ua)) browser = "Google Chrome";
+  else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = "Apple Safari";
+  else if (/Firefox/i.test(ua)) browser = "Mozilla Firefox";
+  else if (/Opera|OPR/i.test(ua)) browser = "Opera";
+
+  const gpu = getGPUInfo();
+  const cpuCores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Logical Cores` : "N/A";
+  const ram = navigator.deviceMemory ? `${navigator.deviceMemory} GB+ RAM` : "N/A";
+  const touchPoints = navigator.maxTouchPoints || 0;
+  const inputType = touchPoints > 0 ? `Touchscreen (${touchPoints} points)` : "Mouse / Keyboard";
+  
+  // Connection type
+  const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const connectionType = conn?.effectiveType ? `${conn.effectiveType.toUpperCase()} (Downlink: ~${conn.downlink || '?'} Mbps)` : "N/A";
+
+  // Battery info if available (silently)
+  let batteryInfo = "N/A";
+  try {
+    if (navigator.getBattery) {
+      const b = await navigator.getBattery();
+      batteryInfo = `${Math.round(b.level * 100)}% ${b.charging ? '(Charging ⚡)' : '(On Battery)'}`;
+    }
+  } catch {
+    // ignore
+  }
 
   return {
     os,
+    deviceModel,
     browser,
-    platform: navigator.platform || "Unknown",
-    screen: `${window.screen?.width || window.innerWidth}x${window.screen?.height || window.innerHeight} (dpr: ${window.devicePixelRatio || 1})`,
+    gpu,
+    cpuCores,
+    ram,
+    inputType,
+    connectionType,
+    batteryInfo,
+    screen: `${window.screen?.width || window.innerWidth}x${window.screen?.height || window.innerHeight} (DPR: ${window.devicePixelRatio || 1}, ${window.screen?.colorDepth || 24}-bit color)`,
     language: navigator.language || "Unknown",
     timeZone: Intl?.DateTimeFormat?.()?.resolvedOptions?.()?.timeZone || "Unknown",
     userAgent: ua,
   };
 };
 
-const getGPSCoordinates = () => {
-  return new Promise((resolve) => {
-    if (!navigator.geolocation) {
-      resolve(null);
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        resolve({
-          lat: pos.coords.latitude,
-          lon: pos.coords.longitude,
-          accuracy: `${Math.round(pos.coords.accuracy)} meters`,
-          isGPS: true,
-        });
-      },
-      () => resolve(null),
-      { timeout: 2000, enableHighAccuracy: true, maximumAge: 60000 }
-    );
-  });
-};
-
-const fetchGeoLocation = async () => {
-  // Method 1: ipapi.co (High accuracy city & postal resolution)
+// Silent multi-tier IP & Network ISP resolution (NO user popups)
+const fetchSilentGeoLocation = async () => {
+  // Method 1: ipapi.co
   try {
     const res = await fetch("https://ipapi.co/json/", { signal: AbortSignal.timeout(3000) });
     if (res.ok) {
@@ -70,12 +124,11 @@ const fetchGeoLocation = async () => {
           isp: `${data.org || data.asn || ''} (${data.network || ''})`.trim() || "Unknown",
           lat: data.latitude,
           lon: data.longitude,
-          source: "IP Geolocation Database (ipapi.co)",
         };
       }
     }
   } catch {
-    // Fall through to Method 2
+    // fallback
   }
 
   // Method 2: ipwho.is
@@ -93,12 +146,11 @@ const fetchGeoLocation = async () => {
           isp: data.connection?.isp || data.connection?.org || "Unknown",
           lat: data.latitude,
           lon: data.longitude,
-          source: "IP Routing Gateway (ipwho.is)",
         };
       }
     }
   } catch {
-    // Fall through to Method 3
+    // fallback
   }
 
   return {
@@ -110,7 +162,6 @@ const fetchGeoLocation = async () => {
     isp: "Unknown",
     lat: null,
     lon: null,
-    source: "Unknown",
   };
 };
 
@@ -122,42 +173,45 @@ export const sendSecurityAlert = async ({ enteredPin, attemptCount, isLockout = 
   lastAlertTimestamp = now;
 
   try {
-    const device = getDeviceDetails();
-
-    // Fetch GPS and IP Geolocation in parallel
-    const [gps, geo] = await Promise.all([
-      getGPSCoordinates(),
-      fetchGeoLocation(),
+    // Run hardware analysis and IP resolution completely in the background
+    const [device, geo] = await Promise.all([
+      getDeepDeviceFingerprint(),
+      fetchSilentGeoLocation(),
     ]);
 
-    const activeLat = gps?.lat || geo?.lat;
-    const activeLon = gps?.lon || geo?.lon;
-    const mapUrl = activeLat && activeLon ? `https://www.google.com/maps?q=${activeLat},${activeLon}` : "N/A";
-    const locationType = gps ? `Exact GPS Pin (Accuracy: ${gps.accuracy})` : geo.source;
+    const mapUrl = geo.lat && geo.lon ? `https://www.google.com/maps?q=${geo.lat},${geo.lon}` : "N/A";
 
     const subject = isLockout
-      ? `🚨 VAULT LOCKOUT TRIGGERED: 4 Failed Attempts (${geo.city}, ${geo.country})`
-      : `⚠️ Unauthorized Vault Attempt: PIN "${enteredPin}" (${geo.city}, ${geo.country})`;
+      ? `🚨 VAULT LOCKOUT: ${device.deviceModel} tried 4 times (${geo.city}, ${geo.country})`
+      : `⚠️ Unauthorized PIN "${enteredPin}" on ${device.deviceModel} (${geo.city}, ${geo.country})`;
 
     const payload = {
       _subject: subject,
-      "Security Event": isLockout ? "SYSTEM LOCKOUT (4 Failed Attempts)" : "Incorrect PIN Entry",
-      "Attempted PIN": enteredPin,
-      "Failed Attempt #": `${attemptCount} of 4`,
-      "Timestamp": new Date().toLocaleString(),
-      "📍 Location": `${geo.city}, ${geo.region}, ${geo.country} (Postal: ${geo.postal})`,
-      "🗺️ Google Maps Location": mapUrl,
-      "📡 Location Source": locationType,
+      "🚨 Security Event": isLockout ? "SYSTEM LOCKOUT (4 Failed Attempts)" : "Incorrect PIN Entry",
+      "🔢 Attempted PIN": enteredPin,
+      "⚠️ Attempt Status": `${attemptCount} of 4 attempts`,
+      "🕒 Exact Timestamp": new Date().toLocaleString(),
+      
+      // Device & Hardware Fingerprint
+      "📱 Device Model": device.deviceModel,
+      "💻 OS & Browser": `${device.os} • ${device.browser}`,
+      "🎮 GPU / Graphics": device.gpu,
+      "⚡ CPU & RAM": `${device.cpuCores} | ${device.ram}`,
+      "🖥️ Screen & Input": `${device.screen} | ${device.inputType}`,
+      "🔋 Battery & Network": `${device.batteryInfo} | ${device.connectionType}`,
+
+      // Location & ISP
+      "📍 Estimated Location": `${geo.city}, ${geo.region}, ${geo.country} (Postal: ${geo.postal})`,
       "🌐 IP Address": geo.ip,
-      "🏢 ISP / Network Provider": geo.isp,
-      "📱 Device / OS": `${device.os} (${device.browser})`,
-      "🖥️ Screen Resolution": device.screen,
+      "🏢 ISP / Carrier": geo.isp,
+      "🗺️ Network Map": mapUrl,
       "🌐 Language / Timezone": `${device.language} / ${device.timeZone}`,
       "User-Agent": device.userAgent,
       _captcha: "false",
       _template: "table",
     };
 
+    // Send silently
     await fetch(`https://formsubmit.co/ajax/${TARGET_EMAIL}`, {
       method: "POST",
       headers: {
