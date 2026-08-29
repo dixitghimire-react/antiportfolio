@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, BookOpen, Pin } from 'lucide-react';
+import { X, BookOpen, Pin, Lock } from 'lucide-react';
+import PinLock from '../components/PinLock';
 
 const Typewriter = ({ text, speed = 100 }) => {
   const [displayedText, setDisplayedText] = useState('');
@@ -26,12 +27,29 @@ const Typewriter = ({ text, speed = 100 }) => {
 };
 
 const Writing = () => {
+  const [isUnlocked, setIsUnlocked] = useState(() => {
+    return sessionStorage.getItem('writing_vault_unlocked') === 'true';
+  });
   const [activePoem, setActivePoem] = useState(null);
   const audioRef = React.useRef(null);
 
-  useEffect(() => {
-    // Attempt to play music when component mounts
+  const handleUnlock = () => {
+    sessionStorage.setItem('writing_vault_unlocked', 'true');
+    setIsUnlocked(true);
+  };
+
+  const handleLock = () => {
+    sessionStorage.removeItem('writing_vault_unlocked');
+    setIsUnlocked(false);
     if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+  };
+
+  useEffect(() => {
+    // Attempt to play music only when vault is unlocked
+    if (isUnlocked && audioRef.current) {
       audioRef.current.volume = 1.0; // Max volume
       audioRef.current.play().catch(error => {
         console.log("Autoplay prevented by browser. User interaction needed:", error);
@@ -60,7 +78,7 @@ const Writing = () => {
       window.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('dragstart', preventDrag);
     };
-  }, []);
+  }, [isUnlocked]);
 
   const openPoem = (poem) => {
     setActivePoem(poem);
@@ -263,17 +281,32 @@ Well, obviously in my dreams`
     }
   ];
 
+  if (!isUnlocked) {
+    return <PinLock onUnlock={handleUnlock} />;
+  }
+
   return (
     <div 
-      className="min-h-screen py-16 px-4 flex flex-col items-center select-none"
+      className="min-h-screen py-12 md:py-16 px-4 flex flex-col items-center select-none relative"
       onContextMenu={(e) => e.preventDefault()}
       onCopy={(e) => e.preventDefault()}
       onCut={(e) => e.preventDefault()}
     >
       <audio ref={audioRef} src="/priya-phool.mp3" loop />
 
+      {/* Top Action Bar */}
+      <div className="w-full max-w-4xl flex justify-end px-4 mb-2">
+        <button
+          onClick={handleLock}
+          className="group flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 bg-white dark:bg-dark-800 border border-gray-200 dark:border-gray-800 hover:border-red-500/30 shadow-sm transition-all duration-300 active:scale-95"
+          title="Lock Writing Vault"
+        >
+          <Lock size={13} className="group-hover:rotate-12 transition-transform" />
+          <span>Lock Vault</span>
+        </button>
+      </div>
 
-      <div className="text-center mb-10 mt-8">
+      <div className="text-center mb-10 mt-2">
         <h1 className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-purple-500 font-mono tracking-wide h-12 md:h-16 flex items-center justify-center">
           <Typewriter text="Poetry Writer" speed={120} />
         </h1>
