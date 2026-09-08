@@ -75,31 +75,7 @@ const TiltCard = ({ children, className = '' }) => {
 };
 
 const Home = () => {
-  const audioRef = useRef(null);
   const heroRef = useRef(null);
-
-  useEffect(() => {
-    const playAudio = () => {
-      if (audioRef.current && audioRef.current.paused) {
-        audioRef.current.volume = 1.0;
-        audioRef.current.play().catch(error => {
-          console.log("Autoplay prevented by browser. User interaction needed:", error);
-        });
-      }
-    };
-
-    playAudio();
-
-    window.addEventListener('click', playAudio, { once: true });
-    window.addEventListener('scroll', playAudio, { once: true });
-    window.addEventListener('keydown', playAudio, { once: true });
-
-    return () => {
-      window.removeEventListener('click', playAudio);
-      window.removeEventListener('scroll', playAudio);
-      window.removeEventListener('keydown', playAudio);
-    };
-  }, []);
 
   // GSAP ambient glow animation for the hero section
   useEffect(() => {
@@ -167,9 +143,6 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center dark:bg-[#121826] bg-gray-50 min-h-screen dark:text-gray-200 text-gray-800 selection:bg-blue-500 selection:text-white">
-      {/* Background Audio */}
-      <audio ref={audioRef} src="/developer-theme.mp3" loop />
-      
       {/* 1. Hero Section */}
       <section 
         ref={heroRef}
