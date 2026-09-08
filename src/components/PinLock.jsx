@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Lock, Unlock, Delete, ArrowLeft, ShieldAlert, Timer, CheckCircle2, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { sendSecurityAlert } from '../utils/securityTelemetry';
 
 const PIN_CODE = "8848";
@@ -68,7 +69,6 @@ const PinLock = ({ onUnlock }) => {
       setAttempts(0);
       setIsSuccess(true);
       setErrorMessage('');
-      // Allow user to experience the full unlocking laser + shockwave animation
       setTimeout(() => {
         onUnlock();
       }, 1300);
@@ -76,7 +76,6 @@ const PinLock = ({ onUnlock }) => {
       const newAttempts = attempts + 1;
       setIsShaking(true);
 
-      // Silently dispatch security telemetry to email in background
       sendSecurityAlert({
         enteredPin,
         attemptCount: newAttempts,
@@ -101,7 +100,7 @@ const PinLock = ({ onUnlock }) => {
         setErrorMessage(`Incorrect PIN. ${remaining} attempt${remaining === 1 ? '' : 's'} left.`);
         setTimeout(() => {
           setIsShaking(false);
-          setPin(''); // Reset circles back to default empty state for retry
+          setPin('');
         }, 500);
       }
     }
@@ -163,15 +162,26 @@ const PinLock = ({ onUnlock }) => {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_20%,transparent_100%)]"></div>
       </div>
 
-      {/* Main Glassmorphic PIN Card */}
-      <div 
-        className={`relative z-10 w-full max-w-sm p-8 sm:p-10 rounded-[2.5rem] backdrop-blur-xl bg-white/[0.03] border transition-all duration-500 shadow-[0_0_60px_rgba(0,0,0,0.7)] flex flex-col items-center overflow-hidden ${
+      {/* Main Glassmorphic PIN Card with Framer Motion Spring Shake and Entrance */}
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ 
+          scale: 1, 
+          opacity: 1, 
+          y: 0,
+          x: isShaking ? [-12, 12, -8, 8, -4, 4, 0] : 0 
+        }}
+        transition={{ 
+          x: { duration: 0.45, ease: "easeInOut" },
+          scale: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+        }}
+        className={`relative z-10 w-full max-w-sm p-8 sm:p-10 rounded-[2.5rem] backdrop-blur-xl bg-white/[0.03] border transition-colors duration-500 shadow-[0_0_60px_rgba(0,0,0,0.7)] flex flex-col items-center overflow-hidden ${
           isLockedOut
             ? 'border-red-500/60 shadow-[0_0_40px_rgba(239,68,68,0.3)] bg-red-950/10'
             : isSuccess 
               ? 'border-emerald-400/80 shadow-[0_0_50px_rgba(52,211,153,0.4)] animate-unlock-dissolve' 
               : 'border-white/10 hover:border-cyan-500/30'
-        } ${isShaking ? 'animate-shake' : ''}`}
+        }`}
       >
         {/* Laser scanline overlay animation when unlocked */}
         {isSuccess && (
@@ -180,14 +190,16 @@ const PinLock = ({ onUnlock }) => {
 
         {/* Header Back Button */}
         {!isSuccess && (
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1, x: -2 }}
+            whileTap={{ scale: 0.9 }}
             onClick={() => navigate('/')}
-            className="absolute top-6 left-6 p-2 rounded-full text-gray-400 hover:text-cyan-400 hover:bg-white/5 transition-all flex items-center gap-1.5 text-xs font-mono"
+            className="absolute top-6 left-6 p-2 rounded-full text-gray-400 hover:text-cyan-400 hover:bg-white/5 transition-colors flex items-center gap-1.5 text-xs font-mono"
             title="Return to Home"
           >
             <ArrowLeft size={16} />
             <span>Home</span>
-          </button>
+          </motion.button>
         )}
 
         {/* Lockout / Attempts Badge in top right */}
@@ -199,10 +211,14 @@ const PinLock = ({ onUnlock }) => {
 
         {/* Success badge in top right */}
         {isSuccess && (
-          <div className="absolute top-6 right-6 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 text-[11px] font-mono tracking-wider flex items-center gap-1 animate-pulse">
+          <motion.div 
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="absolute top-6 right-6 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 text-[11px] font-mono tracking-wider flex items-center gap-1"
+          >
             <Sparkles size={12} />
             <span>VERIFIED</span>
-          </div>
+          </motion.div>
         )}
 
         {/* Lock Icon with Glowing Aura & Shockwaves */}
@@ -215,12 +231,14 @@ const PinLock = ({ onUnlock }) => {
             </>
           )}
 
-          <div 
+          <motion.div 
+            animate={{ scale: isSuccess ? 1.15 : 1, rotate: isSuccess ? -8 : 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className={`w-16 h-16 rounded-2xl flex items-center justify-center border transition-all duration-500 ${
               isLockedOut
                 ? 'bg-red-600/20 border-red-500 text-red-400 shadow-[0_0_30px_rgba(239,68,68,0.6)] animate-pulse'
                 : isSuccess 
-                  ? 'bg-emerald-500/30 border-emerald-400 text-emerald-300 shadow-[0_0_35px_rgba(52,211,153,0.7)] scale-110 rotate-[-8deg]' 
+                  ? 'bg-emerald-500/30 border-emerald-400 text-emerald-300 shadow-[0_0_35px_rgba(52,211,153,0.7)]' 
                   : isShaking
                     ? 'bg-red-500/20 border-red-400 text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.5)]'
                     : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.2)]'
@@ -229,13 +247,13 @@ const PinLock = ({ onUnlock }) => {
             {isLockedOut ? (
               <Timer size={28} className="animate-spin" style={{ animationDuration: '6s' }} />
             ) : isSuccess ? (
-              <Unlock size={30} className="animate-bounce text-emerald-300" />
+              <Unlock size={30} className="text-emerald-300" />
             ) : isShaking ? (
               <ShieldAlert size={28} />
             ) : (
               <Lock size={28} />
             )}
-          </div>
+          </motion.div>
         </div>
 
         {/* Vault Title */}
@@ -280,22 +298,26 @@ const PinLock = ({ onUnlock }) => {
             {[...Array(PIN_LENGTH)].map((_, index) => {
               const isFilled = index < pin.length;
               return (
-                <div
+                <motion.div
                   key={index}
-                  className={`w-4 h-4 rounded-full border-2 transition-all duration-300 flex items-center justify-center ${
+                  animate={{ 
+                    scale: isFilled ? 1.15 : 1,
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                  className={`w-4 h-4 rounded-full border-2 transition-colors duration-300 flex items-center justify-center ${
                     isSuccess
                       ? 'bg-emerald-400 border-emerald-300 shadow-[0_0_16px_rgba(52,211,153,1)] scale-125'
                       : isShaking
-                        ? 'bg-red-500 border-red-400 shadow-[0_0_10px_rgba(239,68,68,0.8)] scale-105'
+                        ? 'bg-red-500 border-red-400 shadow-[0_0_10px_rgba(239,68,68,0.8)]'
                         : isFilled
-                          ? 'bg-cyan-400 border-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.8)] scale-110'
+                          ? 'bg-cyan-400 border-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.8)]'
                           : 'bg-transparent border-gray-600'
                   }`}
                 >
                   {isSuccess && (
                     <div className="w-1.5 h-1.5 rounded-full bg-dark-900 animate-ping" />
                   )}
-                </div>
+                </motion.div>
               );
             })}
           </div>
@@ -310,7 +332,7 @@ const PinLock = ({ onUnlock }) => {
           )}
         </div>
 
-        {/* Keypad Grid (Smoothly fades & disables when success or locked out) */}
+        {/* Keypad Grid with Framer Motion Spring Taps & Hovers */}
         <div className={`grid grid-cols-3 gap-3 w-full max-w-[260px] transition-all duration-500 ${
           isSuccess 
             ? 'opacity-20 blur-sm scale-95 pointer-events-none' 
@@ -319,46 +341,54 @@ const PinLock = ({ onUnlock }) => {
               : 'opacity-100'
         }`}>
           {digits.map((digit) => (
-            <button
+            <motion.button
               key={digit}
+              whileHover={!isLockedOut && !isSuccess ? { scale: 1.05, backgroundColor: "rgba(6, 182, 212, 0.15)" } : {}}
+              whileTap={!isLockedOut && !isSuccess ? { scale: 0.92 } : {}}
               onClick={() => handleDigit(digit)}
               disabled={isLockedOut || isSuccess}
-              className="h-14 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-cyan-500/50 hover:bg-cyan-500/10 text-white font-mono text-xl font-medium transition-all duration-200 active:scale-95 flex items-center justify-center shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] focus:outline-none disabled:cursor-not-allowed"
+              className="h-14 rounded-2xl bg-white/[0.04] border border-white/10 text-white font-mono text-xl font-medium transition-colors duration-200 flex items-center justify-center shadow-sm hover:border-cyan-500/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] focus:outline-none disabled:cursor-not-allowed"
             >
               {digit}
-            </button>
+            </motion.button>
           ))}
 
           {/* Clear Button */}
-          <button
+          <motion.button
+            whileHover={!isLockedOut && !isSuccess ? { scale: 1.05 } : {}}
+            whileTap={!isLockedOut && !isSuccess ? { scale: 0.92 } : {}}
             onClick={handleClear}
             disabled={isLockedOut || isSuccess}
-            className="h-14 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-gray-500 hover:bg-white/5 text-gray-400 font-mono text-xs tracking-wider uppercase transition-all duration-200 active:scale-95 flex items-center justify-center focus:outline-none disabled:cursor-not-allowed"
+            className="h-14 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-gray-500 hover:bg-white/5 text-gray-400 font-mono text-xs tracking-wider uppercase transition-colors duration-200 flex items-center justify-center focus:outline-none disabled:cursor-not-allowed"
             title="Clear"
           >
             Clear
-          </button>
+          </motion.button>
 
           {/* 0 Button */}
-          <button
+          <motion.button
+            whileHover={!isLockedOut && !isSuccess ? { scale: 1.05, backgroundColor: "rgba(6, 182, 212, 0.15)" } : {}}
+            whileTap={!isLockedOut && !isSuccess ? { scale: 0.92 } : {}}
             onClick={() => handleDigit('0')}
             disabled={isLockedOut || isSuccess}
-            className="h-14 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-cyan-500/50 hover:bg-cyan-500/10 text-white font-mono text-xl font-medium transition-all duration-200 active:scale-95 flex items-center justify-center shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] focus:outline-none disabled:cursor-not-allowed"
+            className="h-14 rounded-2xl bg-white/[0.04] border border-white/10 text-white font-mono text-xl font-medium transition-colors duration-200 flex items-center justify-center shadow-sm hover:border-cyan-500/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] focus:outline-none disabled:cursor-not-allowed"
           >
             0
-          </button>
+          </motion.button>
 
           {/* Backspace Button */}
-          <button
+          <motion.button
+            whileHover={!isLockedOut && !isSuccess ? { scale: 1.05, backgroundColor: "rgba(239, 68, 68, 0.15)", borderColor: "rgba(239, 68, 68, 0.4)" } : {}}
+            whileTap={!isLockedOut && !isSuccess ? { scale: 0.92 } : {}}
             onClick={handleBackspace}
             disabled={isLockedOut || isSuccess}
-            className="h-14 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-red-500/40 hover:bg-red-500/10 text-gray-400 hover:text-red-400 transition-all duration-200 active:scale-95 flex items-center justify-center focus:outline-none disabled:cursor-not-allowed"
+            className="h-14 rounded-2xl bg-white/[0.02] border border-white/5 text-gray-400 hover:text-red-400 transition-colors duration-200 flex items-center justify-center focus:outline-none disabled:cursor-not-allowed"
             title="Backspace"
           >
             <Delete size={20} />
-          </button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

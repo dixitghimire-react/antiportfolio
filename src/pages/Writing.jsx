@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, BookOpen, Pin, Lock } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import PinLock from '../components/PinLock';
 
 const Typewriter = ({ text, speed = 100 }) => {
@@ -286,7 +287,10 @@ Well, obviously in my dreams`
   }
 
   return (
-    <div 
+    <motion.div 
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="min-h-screen py-12 md:py-16 px-4 flex flex-col items-center select-none relative"
       onContextMenu={(e) => e.preventDefault()}
       onCopy={(e) => e.preventDefault()}
@@ -296,14 +300,16 @@ Well, obviously in my dreams`
 
       {/* Top Action Bar */}
       <div className="w-full max-w-4xl flex justify-end px-4 mb-2">
-        <button
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={handleLock}
-          className="group flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 bg-white dark:bg-dark-800 border border-gray-200 dark:border-gray-800 hover:border-red-500/30 shadow-sm transition-all duration-300 active:scale-95"
+          className="group flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 bg-white dark:bg-dark-800 border border-gray-200 dark:border-gray-800 hover:border-red-500/30 shadow-sm transition-colors duration-200"
           title="Lock Writing Vault"
         >
           <Lock size={13} className="group-hover:rotate-12 transition-transform" />
           <span>Lock Vault</span>
-        </button>
+        </motion.button>
       </div>
 
       <div className="text-center mb-10 mt-2">
@@ -315,7 +321,12 @@ Well, obviously in my dreams`
         </p>
       </div>
 
-      <div className="w-full max-w-4xl px-4 mb-16">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
+        className="w-full max-w-4xl px-4 mb-16"
+      >
         <div className="p-8 md:p-10 rounded-2xl bg-white dark:bg-dark-800 shadow-xl dark:shadow-none hover-neon-card transition-all duration-500 text-center border border-gray-100 dark:border-gray-800">
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
             About My Writing
@@ -324,7 +335,7 @@ Well, obviously in my dreams`
             I write about the emotions we often struggle to express: love, dreams, memories, heartbreak, and the words left unsaid. Each poem is a small piece of my imagination and experience, written to turn feelings into words and moments into stories.
           </p>
         </div>
-      </div>
+      </motion.div>
 
       <div className="w-full max-w-4xl px-4 mb-12 text-center">
         <h2 className="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">
@@ -337,9 +348,14 @@ Well, obviously in my dreams`
 
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8">
         {poems.map((poem, index) => (
-          <article 
+          <motion.article 
             key={index} 
-            className={`p-8 rounded-2xl bg-white dark:bg-dark-800 shadow-xl dark:shadow-none hover-neon-card transition-all duration-500 flex flex-col justify-between h-full relative ${
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.08, duration: 0.5 }}
+            whileHover={{ y: -6 }}
+            className={`p-8 rounded-2xl bg-white dark:bg-dark-800 shadow-xl dark:shadow-none hover-neon-card transition-shadow duration-300 flex flex-col justify-between h-full relative ${
               poem.pinned ? 'border-2 border-pink-500/40 dark:border-purple-500/40 ring-2 ring-pink-500/20 dark:ring-purple-500/20' : ''
             }`}
           >
@@ -363,86 +379,101 @@ Well, obviously in my dreams`
               </div>
             </div>
             
-            <button 
+            <motion.button 
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => openPoem(poem)}
-              className="mt-auto flex items-center justify-center w-full py-3 rounded-lg bg-gray-100 dark:bg-dark-700 hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors text-gray-800 dark:text-gray-200 group"
+              className="mt-auto flex items-center justify-center w-full py-3 rounded-lg bg-gray-100 dark:bg-dark-700 hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors text-gray-800 dark:text-gray-200 group font-medium"
             >
               <BookOpen className="mr-2 group-hover:scale-110 transition-transform" size={18} />
               Read Poetry
-            </button>
-          </article>
+            </motion.button>
+          </motion.article>
         ))}
       </div>
 
-      {/* Poetry Modal */}
-      {activePoem && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
-          onClick={closePoem}
-        >
-          <div 
-            className="bg-white dark:bg-dark-900 w-full max-w-5xl max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative animate-in fade-in zoom-in-95 duration-300"
-            onClick={(e) => e.stopPropagation()}
+      {/* Poetry Modal with AnimatePresence */}
+      <AnimatePresence>
+        {activePoem && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md"
+            onClick={closePoem}
           >
-            <button 
-              onClick={closePoem}
-              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/20 hover:bg-black/40 text-white backdrop-blur-md transition-all"
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.92, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="bg-white dark:bg-dark-900 w-full max-w-5xl max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative"
+              onClick={(e) => e.stopPropagation()}
             >
-              <X size={24} />
-            </button>
-            
-            {/* Image or Title Side */}
-            <div className="w-full md:w-1/2 h-64 md:h-auto relative">
-              {activePoem.image ? (
-                <>
-                  <img 
-                    src={activePoem.image} 
-                    alt={activePoem.title} 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-8">
-                     {activePoem.pinned && (
-                       <div 
-                         className="absolute top-4 left-4 p-2 rounded-full bg-black/40 text-pink-400 border border-pink-500/30 backdrop-blur-md shadow-sm"
-                         title="Pinned"
-                       >
-                         <Pin size={16} className="rotate-45" />
-                       </div>
-                     )}
-                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 font-serif italic">
-                      {activePoem.title}
-                     </h2>
-                  </div>
-                </>
-              ) : (
-                <div className="w-full h-full min-h-[300px] bg-gradient-to-br from-purple-900 to-black flex flex-col items-center justify-center p-8 border-b md:border-b-0 md:border-r border-dark-700 relative">
-                  {activePoem.pinned && (
-                    <div 
-                      className="absolute top-4 left-4 p-2 rounded-full bg-white/10 text-pink-400 border border-pink-500/30 backdrop-blur-md shadow-sm"
-                      title="Pinned"
-                    >
-                      <Pin size={16} className="rotate-45" />
+              <motion.button 
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={closePoem}
+                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-md transition-colors"
+                aria-label="Close poem"
+              >
+                <X size={22} />
+              </motion.button>
+              
+              {/* Image or Title Side */}
+              <div className="w-full md:w-1/2 h-64 md:h-auto relative">
+                {activePoem.image ? (
+                  <>
+                    <img 
+                      src={activePoem.image} 
+                      alt={activePoem.title} 
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent flex flex-col justify-end p-8">
+                       {activePoem.pinned && (
+                         <div 
+                           className="absolute top-4 left-4 p-2 rounded-full bg-black/40 text-pink-400 border border-pink-500/30 backdrop-blur-md shadow-sm"
+                           title="Pinned"
+                         >
+                           <Pin size={16} className="rotate-45" />
+                         </div>
+                       )}
+                       <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 font-serif italic">
+                        {activePoem.title}
+                       </h2>
                     </div>
-                  )}
-                  <h2 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 text-center font-serif italic">
-                    {activePoem.title}
-                  </h2>
-                </div>
-              )}
-            </div>
-            
-            {/* Content Side */}
-            <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto max-h-[90vh] custom-scrollbar bg-white/50 dark:bg-dark-900/50 backdrop-blur-md">
-              <div className="flex justify-center h-full items-center min-h-[50vh]">
-                <pre className="font-serif text-lg md:text-xl text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed max-w-prose text-center">
-                  {activePoem.content}
-                </pre>
+                  </>
+                ) : (
+                  <div className="w-full h-full min-h-[300px] bg-gradient-to-br from-purple-900 to-black flex flex-col items-center justify-center p-8 border-b md:border-b-0 md:border-r border-dark-700 relative">
+                    {activePoem.pinned && (
+                      <div 
+                        className="absolute top-4 left-4 p-2 rounded-full bg-white/10 text-pink-400 border border-pink-500/30 backdrop-blur-md shadow-sm"
+                        title="Pinned"
+                      >
+                        <Pin size={16} className="rotate-45" />
+                      </div>
+                    )}
+                    <h2 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 text-center font-serif italic">
+                      {activePoem.title}
+                    </h2>
+                  </div>
+                )}
               </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+              
+              {/* Content Side */}
+              <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto max-h-[90vh] custom-scrollbar bg-white/50 dark:bg-dark-900/50 backdrop-blur-md">
+                <div className="flex justify-center h-full items-center min-h-[50vh]">
+                  <pre className="font-serif text-lg md:text-xl text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed max-w-prose text-center">
+                    {activePoem.content}
+                  </pre>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
