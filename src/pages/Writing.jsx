@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, BookOpen, Pin, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PinLock from '../components/PinLock';
@@ -33,6 +33,7 @@ const Writing = () => {
   });
   const [activePoem, setActivePoem] = useState(null);
   const audioRef = React.useRef(null);
+  const poemContentRef = useRef(null);
 
   const handleUnlock = () => {
     sessionStorage.setItem('writing_vault_unlocked', 'true');
@@ -111,6 +112,21 @@ const Writing = () => {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  // Ensure scroll container starts at the top when a poem is opened
+  useEffect(() => {
+    if (activePoem) {
+      if (poemContentRef.current) {
+        poemContentRef.current.scrollTop = 0;
+      }
+      // Also reset on next frame in case of layout animation
+      requestAnimationFrame(() => {
+        if (poemContentRef.current) {
+          poemContentRef.current.scrollTop = 0;
+        }
+      });
+    }
+  }, [activePoem]);
 
   const poems = [
     {
@@ -462,9 +478,12 @@ Well, obviously in my dreams`
               </div>
               
               {/* Content Side */}
-              <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto max-h-[90vh] custom-scrollbar bg-white/50 dark:bg-dark-900/50 backdrop-blur-md">
-                <div className="flex justify-center h-full items-center min-h-[50vh]">
-                  <pre className="font-serif text-lg md:text-xl text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed max-w-prose text-center">
+              <div 
+                ref={poemContentRef}
+                className="w-full md:w-1/2 p-6 sm:p-8 md:p-12 pt-14 md:pt-14 overflow-y-auto max-h-[85vh] custom-scrollbar bg-white/70 dark:bg-dark-900/70 backdrop-blur-md flex flex-col items-center justify-start"
+              >
+                <div className="w-full py-4 md:py-6 flex justify-center">
+                  <pre className="font-serif text-base sm:text-lg md:text-xl text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed max-w-prose text-center font-normal">
                     {activePoem.content}
                   </pre>
                 </div>
