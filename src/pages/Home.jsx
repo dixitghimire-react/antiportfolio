@@ -446,8 +446,35 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 5. Contact Section / Footer */}
-      <section id="contact" className="w-full py-16 dark:bg-[#121826] bg-gray-50 flex flex-col items-center px-4 border-t dark:border-gray-800 border-gray-200">
+      {/* 5. Technical Proficiency Section */}
+      <section id="skills" className="w-full py-12 md:py-16 dark:bg-[#121826] bg-gray-50 border-t dark:border-gray-800 border-gray-200 flex flex-col items-center px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl w-full">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-xs sm:text-sm font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase mb-2">
+              TECHNICAL PROFICIENCY
+            </h2>
+            <div className="w-full border-b border-gray-200 dark:border-gray-800 mb-6" />
+            <div className="space-y-3.5 text-sm sm:text-base leading-relaxed">
+              <p className="dark:text-gray-300 text-gray-700">
+                <strong className="font-bold dark:text-white text-gray-900 mr-2">Languages:</strong>
+                JavaScript, TypeScript, Python, Java, PHP, C# / .NET, HTML5/CSS3, SQL
+              </p>
+              <p className="dark:text-gray-300 text-gray-700">
+                <strong className="font-bold dark:text-white text-gray-900 mr-2">Technologies:</strong>
+                React, Next.js, Blazor, Node, Express, Supabase, Firebase, AWS (EC2, S3, IAM, Elastic Beanstalk), Docker, Kubernetes, Git, Github Actions, Mapbox, Leaflet GIS, Tailwind CSS, Framer Motion, GSAP, MySQL, PostgreSQL, MongoDB, Vite, RESTful APIs, GraphQL.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 6. Contact Section / Footer */}
+      <section id="contact" className="w-full py-16 dark:bg-[#1a2333] bg-white flex flex-col items-center px-4 border-t dark:border-gray-800 border-gray-200">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -55,7 +55,7 @@ const Navbar = ({ toggleTheme, isDark }) => {
           <div className="hidden lg:flex flex-1 justify-center space-x-3 items-center">
             {isHome && (
               <>
-                {['about', 'education', 'projects', 'contact'].map((section) => (
+                {['about', 'education', 'projects', 'skills', 'contact'].map((section) => (
                   <motion.button 
                     key={section}
                     whileHover={{ scale: 1.05, y: -1 }}
@@ -130,7 +130,7 @@ const Navbar = ({ toggleTheme, isDark }) => {
               transition={{ duration: 0.3, ease: 'easeInOut' }}
               className="lg:hidden border-t dark:border-gray-800 border-gray-200 py-4 px-2 space-y-2 overflow-hidden"
             >
-              {['about', 'education', 'projects', 'contact'].map((section, idx) => (
+              {['about', 'education', 'projects', 'skills', 'contact'].map((section, idx) => (
                 <motion.button 
                   key={section}
                   initial={{ opacity: 0, x: -10 }}
