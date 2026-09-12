@@ -93,20 +93,40 @@ const Home = () => {
     return () => ctx.revert();
   }, []);
 
-  const featuredProject = {
-    title: "Nepal Yatra",
-    subtitle: "Himalayan Travel Guide & Itinerary Planner",
-    description: "Built an interactive Himalayan travel guide & itinerary planner using Next.js 15 (App Router), React 19, and TypeScript, serving structured guides for 19+ Nepalese destinations.",
-    highlights: [
-      "Integrated dynamic Leaflet GIS maps with custom category-coded div-markers, animated radar pulses, and coordinate-based viewport panning.",
-      "Developed a multi-day itinerary planner and real-time budget calculator, supporting customizable traveler counts, travel tiers, and print/PDF export features.",
-      "Implemented a global wishlist drawer using React Context and LocalStorage, providing offline persistence and automatic trip duration calculations.",
-      "Crafted responsive, high-performance UI components using Tailwind CSS, Framer Motion, and GSAP, achieving fluid animations and modern glassmorphic styling."
-    ],
-    tags: ["Next.js 15", "React 19", "TypeScript", "Leaflet GIS", "Tailwind CSS", "Framer Motion", "GSAP"],
-    liveUrl: "https://nepal-yatra-peach.vercel.app",
-    githubUrl: "https://github.com/dixitghimire-react/nepal"
-  };
+  const featuredProjects = [
+    {
+      badge: "Flagship Web App",
+      title: "Nepal Yatra",
+      subtitle: "Himalayan Travel Guide & Itinerary Planner",
+      description: "Built an interactive Himalayan travel guide & itinerary planner using Next.js 15 (App Router), React 19, and TypeScript, serving structured guides for 19+ Nepalese destinations.",
+      highlights: [
+        "Integrated dynamic Leaflet GIS maps with custom category-coded div-markers, animated radar pulses, and coordinate-based viewport panning.",
+        "Developed a multi-day itinerary planner and real-time budget calculator, supporting customizable traveler counts, travel tiers, and print/PDF export features.",
+        "Implemented a global wishlist drawer using React Context and LocalStorage, providing offline persistence and automatic trip duration calculations.",
+        "Crafted responsive, high-performance UI components using Tailwind CSS, Framer Motion, and GSAP, achieving fluid animations and modern glassmorphic styling."
+      ],
+      tags: ["Next.js 15", "React 19", "TypeScript", "Leaflet GIS", "Tailwind CSS", "Framer Motion", "GSAP"],
+      liveUrl: "https://nepal-yatra-peach.vercel.app",
+      githubUrl: "https://github.com/dixitghimire-react/nepal",
+      accentColor: "blue"
+    },
+    {
+      badge: "Flagship Desktop AI",
+      title: "J.A.R.V.I.S.",
+      subtitle: "Windows Desktop AI Voice Assistant & Automation",
+      description: "A modular, offline-first Windows desktop voice assistant inspired by Tony Stark's J.A.R.V.I.S. featuring wake word detection, dual-mode NLP routing, native OS automation, and an Iron Man HUD interface.",
+      highlights: [
+        "Designed an Iron Man HUD with PySide6 (Qt) featuring an animated reactive arc reactor orb visualizer responsive to assistant states.",
+        "Engineered an offline-first intent engine powered by rule-based regex parsing, with seamless optional OpenAI fallback for complex conversational requests.",
+        "Implemented thread-safe background wake word detection ('Wake up Jarvis') and low-latency offline Text-to-Speech using pyttsx3.",
+        "Enforced zero arbitrary execution via strict security whitelisting, Windows Known Folders resolution, and two-step verbal confirmations for critical operations."
+      ],
+      tags: ["Python 3.11+", "PySide6 (Qt)", "Speech Recognition", "pyttsx3 (Offline TTS)", "OpenAI API", "Windows Automation", "Regex NLP"],
+      docsUrl: "https://github.com/dixitghimire-react/jarvis#readme",
+      githubUrl: "https://github.com/dixitghimire-react/jarvis",
+      accentColor: "cyan"
+    }
+  ];
 
   const otherProjects = [
     {
@@ -314,83 +334,134 @@ const Home = () => {
             </p>
           </motion.div>
           
-          {/* Main Featured Project: Nepal Yatra with Interactive 3D Tilt Card */}
-          <TiltCard className="mb-14 rounded-2xl dark:bg-[#121826] bg-gray-50 border-2 dark:border-blue-500/40 border-blue-500/30 p-6 md:p-8 shadow-2xl relative overflow-hidden group transition-colors duration-300">
-            {/* Ambient decorative glow */}
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-blue-500/25 transition-all duration-500" />
-            
-            <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-6">
-              <div>
-                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold uppercase tracking-wider mb-3">
-                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />
-                  Flagship Project
-                </div>
-                <h3 className="text-2xl md:text-3xl font-extrabold dark:text-white text-gray-900 group-hover:text-blue-400 transition-colors">
-                  {featuredProject.title}
-                </h3>
-                <p className="text-blue-500 dark:text-blue-400 font-medium text-sm md:text-base mt-1">
-                  {featuredProject.subtitle}
-                </p>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3">
-                <motion.a 
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  href={featuredProject.liveUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(37,99,235,0.6)] transition-all"
+          {/* Featured Projects: Nepal Yatra & J.A.R.V.I.S. with Interactive 3D Tilt Cards */}
+          <div className="space-y-12 mb-14">
+            {featuredProjects.map((project) => {
+              const isCyan = project.accentColor === 'cyan';
+              return (
+                <TiltCard 
+                  key={project.title}
+                  className={`rounded-2xl dark:bg-[#121826] bg-gray-50 border-2 ${
+                    isCyan
+                      ? 'dark:border-cyan-500/40 border-cyan-500/30'
+                      : 'dark:border-blue-500/40 border-blue-500/30'
+                  } p-6 md:p-8 shadow-2xl relative overflow-hidden group transition-colors duration-300`}
                 >
-                  <FaExternalLinkAlt size={13} />
-                  <span>Live Preview</span>
-                </motion.a>
-                <motion.a 
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  href={featuredProject.githubUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 dark:bg-[#1a2333] bg-white border dark:border-gray-700 border-gray-300 hover:border-blue-500 dark:text-gray-200 text-gray-800 hover:text-blue-400 text-sm font-semibold rounded-lg transition-all"
-                >
-                  <FaGithub size={16} />
-                  <span>Source Code</span>
-                </motion.a>
-              </div>
-            </div>
+                  {/* Ambient decorative glow */}
+                  <div className={`absolute -top-24 -right-24 w-64 h-64 ${
+                    isCyan
+                      ? 'bg-cyan-500/10 group-hover:bg-cyan-500/25'
+                      : 'bg-blue-500/10 group-hover:bg-blue-500/25'
+                  } rounded-full blur-3xl pointer-events-none transition-all duration-500`} />
+                  
+                  <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-6">
+                    <div>
+                      <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full ${
+                        isCyan
+                          ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
+                          : 'bg-blue-500/10 border-blue-500/30 text-blue-400'
+                      } border text-xs font-semibold uppercase tracking-wider mb-3`}>
+                        <span className={`w-2 h-2 rounded-full ${
+                          isCyan ? 'bg-cyan-400' : 'bg-blue-400'
+                        } animate-ping`} />
+                        {project.badge}
+                      </div>
+                      <h3 className={`text-2xl md:text-3xl font-extrabold dark:text-white text-gray-900 ${
+                        isCyan ? 'group-hover:text-cyan-400' : 'group-hover:text-blue-400'
+                      } transition-colors`}>
+                        {project.title}
+                      </h3>
+                      <p className={`${
+                        isCyan ? 'text-cyan-500 dark:text-cyan-400' : 'text-blue-500 dark:text-blue-400'
+                      } font-medium text-sm md:text-base mt-1`}>
+                        {project.subtitle}
+                      </p>
+                    </div>
 
-            {/* Description */}
-            <p className="dark:text-gray-300 text-gray-700 text-sm md:text-base leading-relaxed mb-6 font-normal">
-              {featuredProject.description}
-            </p>
+                    {/* Action Buttons */}
+                    <div className="flex flex-wrap items-center gap-3">
+                      {project.liveUrl && (
+                        <motion.a 
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          whileTap={{ scale: 0.95 }}
+                          href={project.liveUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(37,99,235,0.6)] transition-all"
+                        >
+                          <FaExternalLinkAlt size={13} />
+                          <span>Live Preview</span>
+                        </motion.a>
+                      )}
+                      {project.docsUrl && (
+                        <motion.a 
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          whileTap={{ scale: 0.95 }}
+                          href={project.docsUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-semibold rounded-lg shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all"
+                        >
+                          <FaExternalLinkAlt size={13} />
+                          <span>Quickstart & Docs</span>
+                        </motion.a>
+                      )}
+                      <motion.a 
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                        href={project.githubUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className={`inline-flex items-center gap-2 px-5 py-2.5 dark:bg-[#1a2333] bg-white border ${
+                          isCyan
+                            ? 'dark:border-cyan-700/60 border-cyan-300 hover:border-cyan-400 dark:text-gray-200 text-gray-800 hover:text-cyan-400'
+                            : 'dark:border-gray-700 border-gray-300 hover:border-blue-500 dark:text-gray-200 text-gray-800 hover:text-blue-400'
+                        } text-sm font-semibold rounded-lg transition-all`}
+                      >
+                        <FaGithub size={16} />
+                        <span>Source Code</span>
+                      </motion.a>
+                    </div>
+                  </div>
 
-            {/* Highlights Bullet List */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-              {featuredProject.highlights.map((item, idx) => (
-                <motion.div 
-                  key={idx}
-                  whileHover={{ scale: 1.01 }}
-                  className="flex items-start gap-2.5 p-3 rounded-lg dark:bg-[#1a2333]/70 bg-white/80 border dark:border-gray-800 border-gray-200 text-xs md:text-sm dark:text-gray-300 text-gray-700"
-                >
-                  <span className="text-blue-400 font-bold mt-0.5">✦</span>
-                  <span>{item}</span>
-                </motion.div>
-              ))}
-            </div>
+                  {/* Description */}
+                  <p className="dark:text-gray-300 text-gray-700 text-sm md:text-base leading-relaxed mb-6 font-normal">
+                    {project.description}
+                  </p>
 
-            {/* Tech Tags */}
-            <div className="flex flex-wrap gap-2 pt-2 border-t dark:border-gray-800/80 border-gray-200">
-              {featuredProject.tags.map((tag) => (
-                <span 
-                  key={tag} 
-                  className="px-3 py-1 text-xs font-medium rounded-md dark:bg-[#1a2333] bg-gray-200/70 text-blue-400 border dark:border-blue-500/20 border-blue-500/10"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </TiltCard>
+                  {/* Highlights Bullet List */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                    {project.highlights.map((item, idx) => (
+                      <motion.div 
+                        key={idx}
+                        whileHover={{ scale: 1.01 }}
+                        className="flex items-start gap-2.5 p-3 rounded-lg dark:bg-[#1a2333]/70 bg-white/80 border dark:border-gray-800 border-gray-200 text-xs md:text-sm dark:text-gray-300 text-gray-700"
+                      >
+                        <span className={`${isCyan ? 'text-cyan-400' : 'text-blue-400'} font-bold mt-0.5`}>✦</span>
+                        <span>{item}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Tech Tags */}
+                  <div className="flex flex-wrap gap-2 pt-2 border-t dark:border-gray-800/80 border-gray-200">
+                    {project.tags.map((tag) => (
+                      <span 
+                        key={tag} 
+                        className={`px-3 py-1 text-xs font-medium rounded-md dark:bg-[#1a2333] bg-gray-200/70 ${
+                          isCyan
+                            ? 'text-cyan-400 border dark:border-cyan-500/20 border-cyan-500/10'
+                            : 'text-blue-400 border dark:border-blue-500/20 border-blue-500/10'
+                        }`}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </TiltCard>
+              );
+            })}
+          </div>
 
           {/* Other Projects Grid */}
           <div className="mb-4">
@@ -466,7 +537,7 @@ const Home = () => {
               </p>
               <p className="dark:text-gray-300 text-gray-700">
                 <strong className="font-bold dark:text-white text-gray-900 mr-2">Technologies:</strong>
-                React, Next.js, Blazor, Node, Express, Supabase, Firebase, AWS (EC2, S3, IAM, Elastic Beanstalk), Docker, Kubernetes, Git, Github Actions, Mapbox, Leaflet GIS, Tailwind CSS, Framer Motion, GSAP, MySQL, PostgreSQL, MongoDB, Vite, RESTful APIs, GraphQL.
+                React, Next.js, Blazor, Node, Express, Supabase, Firebase, AWS (EC2, S3, IAM, Elastic Beanstalk), Docker, Kubernetes, Git, Github Actions, Mapbox, Leaflet GIS, Tailwind CSS, Framer Motion, GSAP, PySide6 (Qt), Speech Recognition, MySQL, PostgreSQL, MongoDB, Vite, RESTful APIs, GraphQL.
               </p>
             </div>
           </motion.div>

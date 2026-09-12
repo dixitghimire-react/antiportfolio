@@ -2,7 +2,9 @@
 
 A modern, responsive, and aesthetic developer portfolio showcasing full-stack projects, writings, education, and technical expertise.
 
-## 🌟 Featured Project: Nepal Yatra
+## 🌟 Featured Projects
+
+### 1. Nepal Yatra
 **Himalayan Travel Guide & Itinerary Planner**
 - **Live Website**: [nepal-yatra-peach.vercel.app](https://nepal-yatra-peach.vercel.app)
 - **GitHub Repository**: [github.com/dixitghimire-react/nepal](https://github.com/dixitghimire-react/nepal)
@@ -13,6 +15,16 @@ A modern, responsive, and aesthetic developer portfolio showcasing full-stack pr
   - Multi-day itinerary planner and real-time budget calculator with PDF export.
   - Global wishlist drawer with React Context and LocalStorage offline persistence.
   - Responsive, high-performance glassmorphic UI with smooth animations.
+
+### 2. J.A.R.V.I.S.
+**Windows Desktop AI Voice Assistant & Automation**
+- **GitHub Repository**: [github.com/dixitghimire-react/jarvis](https://github.com/dixitghimire-react/jarvis)
+- **Tech Stack**: Python 3.11+, PySide6 (Qt), Speech Recognition, pyttsx3 (Offline TTS), OpenAI API, Windows Automation.
+- **Key Features**:
+  - Futuristic Iron Man HUD GUI with state-reactive arc reactor orb visualizer.
+  - Offline-first intent engine with rule-based regex parsing and optional OpenAI conversational fallback.
+  - Thread-safe background wake word detection ("Wake up Jarvis") and low-latency speech synthesis.
+  - Native Windows Known Folders resolution, safe app automation, and two-step confirmation for critical actions.
 
 ## 🛠️ More Projects
 - **Tic Tac Toe**: Two-player game with sleek UI and smooth animations. ([GitHub](https://github.com/dixitghimire-react/tic-tac-toe))
