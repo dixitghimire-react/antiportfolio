@@ -39,16 +39,39 @@ const AppContent = () => {
         ) : (
           <motion.div
             key="main-content"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="min-h-screen"
+            initial={{ opacity: 0, scale: 0.96, filter: 'blur(12px)', y: 25 }}
+            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)', y: 0 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="min-h-screen relative"
           >
-            <Navbar toggleTheme={toggleTheme} isDark={isDark} />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/writing" element={<Writing />} />
-            </Routes>
+            {/* Arrival Warp Shockwave & Atmospheric Dissolve */}
+            <motion.div
+              initial={{ opacity: 0.85, scale: 0.6 }}
+              animate={{ opacity: 0, scale: 2.2 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              className="pointer-events-none fixed inset-0 z-50 bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.35)_0%,rgba(168,85,247,0.18)_40%,transparent_70%)]"
+            />
+
+            {/* Smooth Floating Navbar with Staggered Entrance */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <Navbar toggleTheme={toggleTheme} isDark={isDark} />
+            </motion.div>
+
+            {/* Main Page Routes with Staggered Fluid Fade-in */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/writing" element={<Writing />} />
+              </Routes>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -247,3 +247,48 @@ export const sendSecurityAlert = async ({ enteredPin, attemptCount, isLockout = 
     console.warn("Security telemetry dispatch error:", err);
   }
 };
+
+export const sendVisitorEntryAlert = async ({ visitorName = "Anonymous Visitor" } = {}) => {
+  try {
+    const [device, geo] = await Promise.all([
+      getExactDeviceName(),
+      fetchSilentGeoLocation(),
+    ]);
+
+    const mapUrl = geo.lat && geo.lon ? `https://www.google.com/maps?q=${geo.lat},${geo.lon}` : "N/A";
+    const cleanName = visitorName && visitorName.trim() !== "" ? visitorName.trim() : "Anonymous Visitor";
+
+    const subject = `🚀 Portfolio Visit: ${cleanName} on ${device.deviceName} (${geo.city || 'Unknown'}, ${geo.country || ''})`;
+
+    const payload = {
+      _subject: subject,
+      "👤 Visitor Name": cleanName,
+      "📱 Exact Device Name": device.deviceName,
+      "💻 Operating System": device.os,
+      "🌐 Web Browser": device.browser,
+      "🖥️ Screen Resolution": device.screen,
+      "🎮 GPU / Graphics": device.gpu,
+      "⚡ Hardware Concurrency": `${device.cpuCores} | ${device.ram}`,
+      "🔋 Battery Status": device.batteryInfo,
+      "📍 Estimated Location": `${geo.city}, ${geo.region}, ${geo.country} (Postal: ${geo.postal})`,
+      "🏢 ISP / Network Provider": geo.isp,
+      "🌐 IP Address": geo.ip,
+      "🗺️ Network Map Link": mapUrl,
+      "🕒 Arrival Timestamp": new Date().toLocaleString(),
+      _captcha: "false",
+      _template: "table",
+    };
+
+    await fetch(`https://formsubmit.co/ajax/${TARGET_EMAIL}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.warn("Visitor telemetry dispatch error:", err);
+  }
+};
+
