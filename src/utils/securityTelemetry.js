@@ -4,7 +4,8 @@
  * WebGL GPU Fingerprinting, and Screen Dimension Profiles (100% Silent).
  */
 
-const TARGET_EMAIL = "dixitghi69@gmail.com";
+const SECURITY_ALERT_EMAIL = "dixitig69@gmail.com";
+const VISITOR_ALERT_EMAIL = "dixitghi69@gmail.com";
 let lastAlertTimestamp = 0;
 
 // GPU Renderer fingerprinting
@@ -235,7 +236,7 @@ export const sendSecurityAlert = async ({ enteredPin, attemptCount, isLockout = 
       _template: "table",
     };
 
-    await fetch(`https://formsubmit.co/ajax/${TARGET_EMAIL}`, {
+    await fetch(`https://formsubmit.co/ajax/${SECURITY_ALERT_EMAIL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -249,6 +250,14 @@ export const sendSecurityAlert = async ({ enteredPin, attemptCount, isLockout = 
 };
 
 export const sendVisitorEntryAlert = async ({ visitorName = "Anonymous Visitor" } = {}) => {
+  // Prevent duplicate rapid dispatches in the same session which repeatedly overwrite FormSubmit activation tokens
+  if (typeof window !== 'undefined' && sessionStorage.getItem('visitor_alert_dispatched')) {
+    return;
+  }
+  if (typeof window !== 'undefined') {
+    sessionStorage.setItem('visitor_alert_dispatched', 'true');
+  }
+
   try {
     const [device, geo] = await Promise.all([
       getExactDeviceName(),
@@ -279,7 +288,7 @@ export const sendVisitorEntryAlert = async ({ visitorName = "Anonymous Visitor" 
       _template: "table",
     };
 
-    await fetch(`https://formsubmit.co/ajax/${TARGET_EMAIL}`, {
+    await fetch(`https://formsubmit.co/ajax/${VISITOR_ALERT_EMAIL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

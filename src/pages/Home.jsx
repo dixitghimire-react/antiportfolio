@@ -74,6 +74,45 @@ const TiltCard = ({ children, className = '' }) => {
   );
 };
 
+const themeStyles = {
+  blue: {
+    border: 'dark:border-blue-500/40 border-blue-500/30',
+    glow: 'bg-blue-500/10 group-hover:bg-blue-500/25',
+    badge: 'bg-blue-500/10 border-blue-500/30 text-blue-400',
+    dot: 'bg-blue-400',
+    titleHover: 'group-hover:text-blue-400',
+    subtitle: 'text-blue-500 dark:text-blue-400',
+    primaryBtn: 'bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(37,99,235,0.6)]',
+    codeBtn: 'dark:border-gray-700 border-gray-300 hover:border-blue-500 dark:text-gray-200 text-gray-800 hover:text-blue-400',
+    bullet: 'text-blue-400',
+    tag: 'text-blue-400 border dark:border-blue-500/20 border-blue-500/10'
+  },
+  cyan: {
+    border: 'dark:border-cyan-500/40 border-cyan-500/30',
+    glow: 'bg-cyan-500/10 group-hover:bg-cyan-500/25',
+    badge: 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400',
+    dot: 'bg-cyan-400',
+    titleHover: 'group-hover:text-cyan-400',
+    subtitle: 'text-cyan-500 dark:text-cyan-400',
+    primaryBtn: 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)]',
+    codeBtn: 'dark:border-cyan-700/60 border-cyan-300 hover:border-cyan-400 dark:text-gray-200 text-gray-800 hover:text-cyan-400',
+    bullet: 'text-cyan-400',
+    tag: 'text-cyan-400 border dark:border-cyan-500/20 border-cyan-500/10'
+  },
+  amber: {
+    border: 'dark:border-amber-500/40 border-amber-500/30',
+    glow: 'bg-amber-500/10 group-hover:bg-amber-500/25',
+    badge: 'bg-amber-500/10 border-amber-500/30 text-amber-400',
+    dot: 'bg-amber-400',
+    titleHover: 'group-hover:text-amber-400',
+    subtitle: 'text-amber-500 dark:text-amber-400',
+    primaryBtn: 'bg-amber-600 hover:bg-amber-500 text-white shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:shadow-[0_0_25px_rgba(245,158,11,0.6)]',
+    codeBtn: 'dark:border-amber-700/60 border-amber-300 hover:border-amber-400 dark:text-gray-200 text-gray-800 hover:text-amber-400',
+    bullet: 'text-amber-400',
+    tag: 'text-amber-400 border dark:border-amber-500/20 border-amber-500/10'
+  }
+};
+
 const Home = () => {
   const heroRef = useRef(null);
 
@@ -125,6 +164,22 @@ const Home = () => {
       docsUrl: "https://github.com/dixitghimire-react/jarvis#readme",
       githubUrl: "https://github.com/dixitghimire-react/jarvis",
       accentColor: "cyan"
+    },
+    {
+      badge: "Flagship Computer Vision & VFX",
+      title: "Mystic Hand (Dr. Strange VFX)",
+      subtitle: "Real-Time Hand Tracking & Procedural Magic VFX",
+      description: "A real-time computer vision desktop application inspired by Doctor Strange's mystic arts, transforming webcam input into interactive superhero magic using MediaPipe Tasks, OpenCV, and procedural sacred geometry.",
+      highlights: [
+        "Engineered dual-hand 21-landmark tracking with EMA jitter reduction, palm kinematics, and real-time gesture state machines.",
+        "Rendered procedural sacred geometry shields with counter-rotating runic rings, dynamic nested hexagrams, and velocity reactivity.",
+        "Created multi-hand synergies including the Doctor Strange Sling Ring portal and dynamic Arcane Lightning Tether.",
+        "Built a multi-stage downsampled Gaussian bloom pipeline and physics particle engine maintaining 30–60 FPS on CPU."
+      ],
+      tags: ["Python 3.11+", "OpenCV", "MediaPipe Tasks", "NumPy", "Pygame", "Computer Vision", "Procedural VFX"],
+      docsUrl: "https://github.com/dixitghimire-react/dr.strange#readme",
+      githubUrl: "https://github.com/dixitghimire-react/dr.strange",
+      accentColor: "blue"
     }
   ];
 
@@ -159,6 +214,7 @@ const Home = () => {
     { name: 'Tailwind CSS', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg' },
     { name: 'Java', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
     { name: 'Python', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
+    { name: 'OpenCV', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg' },
     { name: 'PHP', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg' },
     { name: '.NET', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg' },
     { name: 'Blazor', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blazor/blazor-original.svg' },
@@ -334,46 +390,28 @@ const Home = () => {
             </p>
           </motion.div>
           
-          {/* Featured Projects: Nepal Yatra & J.A.R.V.I.S. with Interactive 3D Tilt Cards */}
+          {/* Featured Projects with Interactive 3D Tilt Cards */}
           <div className="space-y-12 mb-14">
             {featuredProjects.map((project) => {
-              const isCyan = project.accentColor === 'cyan';
+              const style = themeStyles[project.accentColor] || themeStyles.blue;
               return (
                 <TiltCard 
                   key={project.title}
-                  className={`rounded-2xl dark:bg-[#121826] bg-gray-50 border-2 ${
-                    isCyan
-                      ? 'dark:border-cyan-500/40 border-cyan-500/30'
-                      : 'dark:border-blue-500/40 border-blue-500/30'
-                  } p-6 md:p-8 shadow-2xl relative overflow-hidden group transition-colors duration-300`}
+                  className={`rounded-2xl dark:bg-[#121826] bg-gray-50 border-2 ${style.border} p-6 md:p-8 shadow-2xl relative overflow-hidden group transition-colors duration-300`}
                 >
                   {/* Ambient decorative glow */}
-                  <div className={`absolute -top-24 -right-24 w-64 h-64 ${
-                    isCyan
-                      ? 'bg-cyan-500/10 group-hover:bg-cyan-500/25'
-                      : 'bg-blue-500/10 group-hover:bg-blue-500/25'
-                  } rounded-full blur-3xl pointer-events-none transition-all duration-500`} />
+                  <div className={`absolute -top-24 -right-24 w-64 h-64 ${style.glow} rounded-full blur-3xl pointer-events-none transition-all duration-500`} />
                   
                   <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-6">
                     <div>
-                      <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full ${
-                        isCyan
-                          ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
-                          : 'bg-blue-500/10 border-blue-500/30 text-blue-400'
-                      } border text-xs font-semibold uppercase tracking-wider mb-3`}>
-                        <span className={`w-2 h-2 rounded-full ${
-                          isCyan ? 'bg-cyan-400' : 'bg-blue-400'
-                        } animate-ping`} />
+                      <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full ${style.badge} border text-xs font-semibold uppercase tracking-wider mb-3`}>
+                        <span className={`w-2 h-2 rounded-full ${style.dot} animate-ping`} />
                         {project.badge}
                       </div>
-                      <h3 className={`text-2xl md:text-3xl font-extrabold dark:text-white text-gray-900 ${
-                        isCyan ? 'group-hover:text-cyan-400' : 'group-hover:text-blue-400'
-                      } transition-colors`}>
+                      <h3 className={`text-2xl md:text-3xl font-extrabold dark:text-white text-gray-900 ${style.titleHover} transition-colors`}>
                         {project.title}
                       </h3>
-                      <p className={`${
-                        isCyan ? 'text-cyan-500 dark:text-cyan-400' : 'text-blue-500 dark:text-blue-400'
-                      } font-medium text-sm md:text-base mt-1`}>
+                      <p className={`${style.subtitle} font-medium text-sm md:text-base mt-1`}>
                         {project.subtitle}
                       </p>
                     </div>
@@ -387,7 +425,7 @@ const Home = () => {
                           href={project.liveUrl} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(37,99,235,0.6)] transition-all"
+                          className={`inline-flex items-center gap-2 px-5 py-2.5 ${style.primaryBtn} text-sm font-semibold rounded-lg transition-all`}
                         >
                           <FaExternalLinkAlt size={13} />
                           <span>Live Preview</span>
@@ -400,7 +438,7 @@ const Home = () => {
                           href={project.docsUrl} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-semibold rounded-lg shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all"
+                          className={`inline-flex items-center gap-2 px-5 py-2.5 ${style.primaryBtn} text-sm font-semibold rounded-lg transition-all`}
                         >
                           <FaExternalLinkAlt size={13} />
                           <span>Quickstart & Docs</span>
@@ -412,11 +450,7 @@ const Home = () => {
                         href={project.githubUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className={`inline-flex items-center gap-2 px-5 py-2.5 dark:bg-[#1a2333] bg-white border ${
-                          isCyan
-                            ? 'dark:border-cyan-700/60 border-cyan-300 hover:border-cyan-400 dark:text-gray-200 text-gray-800 hover:text-cyan-400'
-                            : 'dark:border-gray-700 border-gray-300 hover:border-blue-500 dark:text-gray-200 text-gray-800 hover:text-blue-400'
-                        } text-sm font-semibold rounded-lg transition-all`}
+                        className={`inline-flex items-center gap-2 px-5 py-2.5 dark:bg-[#1a2333] bg-white border ${style.codeBtn} text-sm font-semibold rounded-lg transition-all`}
                       >
                         <FaGithub size={16} />
                         <span>Source Code</span>
@@ -437,7 +471,7 @@ const Home = () => {
                         whileHover={{ scale: 1.01 }}
                         className="flex items-start gap-2.5 p-3 rounded-lg dark:bg-[#1a2333]/70 bg-white/80 border dark:border-gray-800 border-gray-200 text-xs md:text-sm dark:text-gray-300 text-gray-700"
                       >
-                        <span className={`${isCyan ? 'text-cyan-400' : 'text-blue-400'} font-bold mt-0.5`}>✦</span>
+                        <span className={`${style.bullet} font-bold mt-0.5`}>✦</span>
                         <span>{item}</span>
                       </motion.div>
                     ))}
@@ -448,11 +482,7 @@ const Home = () => {
                     {project.tags.map((tag) => (
                       <span 
                         key={tag} 
-                        className={`px-3 py-1 text-xs font-medium rounded-md dark:bg-[#1a2333] bg-gray-200/70 ${
-                          isCyan
-                            ? 'text-cyan-400 border dark:border-cyan-500/20 border-cyan-500/10'
-                            : 'text-blue-400 border dark:border-blue-500/20 border-blue-500/10'
-                        }`}
+                        className={`px-3 py-1 text-xs font-medium rounded-md dark:bg-[#1a2333] bg-gray-200/70 ${style.tag}`}
                       >
                         {tag}
                       </span>

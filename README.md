@@ -26,6 +26,17 @@ A modern, responsive, and aesthetic developer portfolio showcasing full-stack pr
   - Thread-safe background wake word detection ("Wake up Jarvis") and low-latency speech synthesis.
   - Native Windows Known Folders resolution, safe app automation, and two-step confirmation for critical actions.
 
+### 3. Mystic Hand (Dr. Strange VFX)
+**Real-Time Hand Tracking & Procedural Magic VFX**
+- **GitHub Repository**: [github.com/dixitghimire-react/dr.strange](https://github.com/dixitghimire-react/dr.strange)
+- **Tech Stack**: Python 3.11+, OpenCV, MediaPipe Tasks, NumPy, Pygame, Computer Vision, Procedural VFX.
+- **Key Features**:
+  - Dual-hand 21-landmark tracking with EMA jitter reduction, palm kinematics, and real-time gesture state machines.
+  - Procedural sacred geometry rotating shields with runic rings, nested hexagrams, and velocity reactivity.
+  - Doctor Strange Sling Ring portal spanning between hands with fiery sparks and cosmic rift interior.
+  - Multi-gesture magic VFX including Arcane Lightning Tether, energy orbs, plasma beams, and knuckle lightning.
+  - Multi-stage downsampled Gaussian bloom pipeline and physics particle engine maintaining 30–60 FPS on CPU.
+
 ## 🛠️ More Projects
 - **Tic Tac Toe**: Two-player game with sleek UI and smooth animations. ([GitHub](https://github.com/dixitghimire-react/tic-tac-toe))
 - **Flappy Bird**: Classic arcade game clone built during early SE journey. ([GitHub](https://github.com/dixitghimire-react/flappy-bird))
@@ -33,8 +44,10 @@ A modern, responsive, and aesthetic developer portfolio showcasing full-stack pr
 
 ## 💻 Tech Stack
 - **Languages & Frameworks**: HTML5, CSS3, JavaScript (ES6+), TypeScript, React.js, Next.js, Java, Python
+- **AI & Computer Vision**: OpenCV, MediaPipe, OpenAI API
 - **Styling & UI**: Tailwind CSS, Framer Motion, GSAP
 - **Tooling**: Vite, Oxlint, Git / GitHub
 
 ---
 © Dikshit Ghimire. All rights reserved.
+
