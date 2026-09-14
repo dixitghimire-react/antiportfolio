@@ -3,12 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    overflow-x: clip;
+  }
+
   body {
     @apply bg-gray-50 text-gray-900 transition-colors duration-300;
+    overflow-x: clip;
+    min-height: 100vh;
   }
   
   html.dark body {
-    @apply bg-dark-900 text-gray-100;
+    @apply bg-[#121826] text-gray-100;
   }
 }
 

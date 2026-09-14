@@ -32,7 +32,7 @@ const AppContent = () => {
   const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <div className="relative min-h-screen dark:bg-[#121826] bg-gray-50 overflow-x-hidden selection:bg-blue-500 selection:text-white">
+    <div className="relative min-h-screen dark:bg-[#121826] bg-gray-50 selection:bg-blue-500 selection:text-white">
       <AnimatePresence mode="wait">
         {!hasEntered ? (
           <EnterScreen key="enter-screen" onEnter={() => setHasEntered(true)} />
@@ -42,7 +42,7 @@ const AppContent = () => {
             initial={{ opacity: 0, scale: 0.96, filter: 'blur(12px)', y: 25 }}
             animate={{ opacity: 1, scale: 1, filter: 'blur(0px)', y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="min-h-screen relative"
+            className="relative"
           >
             {/* Arrival Warp Shockwave & Atmospheric Dissolve */}
             <motion.div

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { FaGithub, FaLinkedin, FaEnvelope, FaExternalLinkAlt } from 'react-icons/fa';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { CheckCircle2, AlertCircle, Loader2, X } from 'lucide-react';
@@ -286,7 +287,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center dark:bg-[#121826] bg-gray-50 min-h-screen dark:text-gray-200 text-gray-800 selection:bg-blue-500 selection:text-white">
+    <div className="flex flex-col items-center dark:bg-[#121826] bg-gray-50 w-full dark:text-gray-200 text-gray-800 selection:bg-blue-500 selection:text-white">
       {/* 1. Hero Section */}
       <section 
         ref={heroRef}
@@ -639,7 +640,7 @@ const Home = () => {
       </section>
 
       {/* 6. Contact Section / Footer */}
-      <section id="contact" className="w-full py-16 dark:bg-[#1a2333] bg-white flex flex-col items-center px-4 border-t dark:border-gray-800 border-gray-200">
+      <footer id="contact" className="w-full pt-16 pb-12 dark:bg-[#1a2333] bg-white flex flex-col items-center px-4 border-t dark:border-gray-800 border-gray-200">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -773,50 +774,53 @@ const Home = () => {
           ))}
         </div>
         
-        <p className="text-gray-500 text-xs">
+        <p className="text-gray-500 text-xs text-center">
           © {new Date().getFullYear()} Dikshit Ghimire. All rights reserved.
         </p>
-      </section>
+      </footer>
 
       {/* Floating Success / Error Notification Toast */}
-      <AnimatePresence>
-        {submitStatus && (
-          <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 30, scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 450, damping: 30 }}
-            className={`fixed bottom-6 right-6 z-50 max-w-md p-4 rounded-2xl border shadow-2xl backdrop-blur-md flex items-start gap-3.5 ${
-              submitStatus === 'success'
-                ? 'dark:bg-[#121826]/95 bg-white/95 dark:border-emerald-500/40 border-emerald-500/30 shadow-[0_10px_35px_rgba(16,185,129,0.25)]'
-                : 'dark:bg-[#121826]/95 bg-white/95 dark:border-rose-500/40 border-rose-500/30 shadow-[0_10px_35px_rgba(244,63,94,0.25)]'
-            }`}
-          >
-            <div className={`p-2 rounded-xl ${
-              submitStatus === 'success' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'
-            } flex-shrink-0`}>
-              {submitStatus === 'success' ? <CheckCircle2 size={22} className="text-emerald-400" /> : <AlertCircle size={22} className="text-rose-400" />}
-            </div>
-            
-            <div className="flex-1 pr-1">
-              <h4 className="font-bold text-sm dark:text-white text-gray-900">
-                {submitStatus === 'success' ? 'Message Sent Successfully! 🚀' : 'Submission Failed'}
-              </h4>
-              <p className="text-xs dark:text-gray-300 text-gray-600 mt-1 leading-relaxed">
-                {toastMessage}
-              </p>
-            </div>
-
-            <button
-              onClick={() => setSubmitStatus(null)}
-              className="text-gray-400 hover:text-gray-200 transition-colors p-1 rounded-lg hover:bg-gray-500/10 cursor-pointer"
-              aria-label="Close notification"
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {submitStatus && (
+            <motion.div
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 30, scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 450, damping: 30 }}
+              className={`fixed bottom-6 right-6 z-50 max-w-md p-4 rounded-2xl border shadow-2xl backdrop-blur-md flex items-start gap-3.5 ${
+                submitStatus === 'success'
+                  ? 'dark:bg-[#121826]/95 bg-white/95 dark:border-emerald-500/40 border-emerald-500/30 shadow-[0_10px_35px_rgba(16,185,129,0.25)]'
+                  : 'dark:bg-[#121826]/95 bg-white/95 dark:border-rose-500/40 border-rose-500/30 shadow-[0_10px_35px_rgba(244,63,94,0.25)]'
+              }`}
             >
-              <X size={16} />
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <div className={`p-2 rounded-xl ${
+                submitStatus === 'success' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'
+              } flex-shrink-0`}>
+                {submitStatus === 'success' ? <CheckCircle2 size={22} className="text-emerald-400" /> : <AlertCircle size={22} className="text-rose-400" />}
+              </div>
+              
+              <div className="flex-1 pr-1">
+                <h4 className="font-bold text-sm dark:text-white text-gray-900">
+                  {submitStatus === 'success' ? 'Message Sent Successfully! 🚀' : 'Submission Failed'}
+                </h4>
+                <p className="text-xs dark:text-gray-300 text-gray-600 mt-1 leading-relaxed">
+                  {toastMessage}
+                </p>
+              </div>
+
+              <button
+                onClick={() => setSubmitStatus(null)}
+                className="text-gray-400 hover:text-gray-200 transition-colors p-1 rounded-lg hover:bg-gray-500/10 cursor-pointer"
+                aria-label="Close notification"
+              >
+                <X size={16} />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 };
