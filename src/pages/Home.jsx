@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaGithub, FaLinkedin, FaEnvelope, FaExternalLinkAlt } from 'react-icons/fa';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { CheckCircle2, AlertCircle, Loader2, X } from 'lucide-react';
 import gsap from 'gsap';
 
 const Typewriter = ({ text, speed = 100 }) => {
@@ -115,6 +116,69 @@ const themeStyles = {
 
 const Home = () => {
   const heroRef = useRef(null);
+
+  // Contact form submission state
+  const [formState, setFormState] = useState({ name: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
+  const [toastMessage, setToastMessage] = useState('');
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormState((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    if (!formState.name.trim() || !formState.email.trim() || !formState.message.trim()) return;
+
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/dixitghi69@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: formState.name,
+          email: formState.email,
+          message: formState.message,
+          _subject: `New message from ${formState.name} via Antiportfolio!`,
+          _captcha: "false",
+          _template: "table",
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (response.ok && data.success !== "false") {
+        setSubmitStatus('success');
+        setToastMessage("Your message has been sent successfully! Dikshit will get back to you shortly.");
+        setFormState({ name: '', email: '', message: '' });
+      } else {
+        setSubmitStatus('error');
+        setToastMessage(data.message || "Failed to send message. Please try again.");
+      }
+    } catch (err) {
+      console.error("Contact form error:", err);
+      setSubmitStatus('error');
+      setToastMessage("Something went wrong while sending your message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Auto-dismiss success toast after 6 seconds
+  useEffect(() => {
+    if (submitStatus === 'success') {
+      const timer = setTimeout(() => {
+        setSubmitStatus(null);
+      }, 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [submitStatus]);
 
   // GSAP ambient glow animation for the hero section
   useEffect(() => {
@@ -586,40 +650,105 @@ const Home = () => {
           Let's Connect
         </motion.h2>
         
-        {/* Contact Form with Framer Motion entrance */}
+        {/* Contact Form with AJAX submission */}
         <motion.form 
           initial={{ opacity: 0, scale: 0.97 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          action="https://formsubmit.co/dixitghi69@gmail.com" 
-          method="POST"
+          onSubmit={handleContactSubmit}
           className="w-full max-w-md dark:bg-[#1a2333] bg-white p-8 rounded-xl shadow-xl border dark:border-gray-800 border-gray-200 mb-12 relative z-10"
         >
           <div className="mb-4">
             <label htmlFor="name" className="block dark:text-gray-400 text-gray-600 text-sm font-bold mb-2">Name</label>
-            <input type="text" id="name" name="name" required className="w-full px-3 py-2 dark:bg-[#121826] bg-gray-50 dark:text-white text-gray-900 border dark:border-gray-700 border-gray-300 rounded focus:outline-none focus:border-blue-500 transition-colors" placeholder="Your Name" />
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              required 
+              value={formState.name}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 dark:bg-[#121826] bg-gray-50 dark:text-white text-gray-900 border dark:border-gray-700 border-gray-300 rounded focus:outline-none focus:border-blue-500 transition-colors" 
+              placeholder="Your Name" 
+            />
           </div>
           <div className="mb-4">
             <label htmlFor="email" className="block dark:text-gray-400 text-gray-600 text-sm font-bold mb-2">Email</label>
-            <input type="email" id="email" name="email" required className="w-full px-3 py-2 dark:bg-[#121826] bg-gray-50 dark:text-white text-gray-900 border dark:border-gray-700 border-gray-300 rounded focus:outline-none focus:border-blue-500 transition-colors" placeholder="your.email@example.com" />
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              required 
+              value={formState.email}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 dark:bg-[#121826] bg-gray-50 dark:text-white text-gray-900 border dark:border-gray-700 border-gray-300 rounded focus:outline-none focus:border-blue-500 transition-colors" 
+              placeholder="your.email@example.com" 
+            />
           </div>
           <div className="mb-6">
             <label htmlFor="message" className="block dark:text-gray-400 text-gray-600 text-sm font-bold mb-2">Message</label>
-            <textarea id="message" name="message" rows="4" required className="w-full px-3 py-2 dark:bg-[#121826] bg-gray-50 dark:text-white text-gray-900 border dark:border-gray-700 border-gray-300 rounded focus:outline-none focus:border-blue-500 transition-colors resize-none" placeholder="Your message here..."></textarea>
+            <textarea 
+              id="message" 
+              name="message" 
+              rows="4" 
+              required 
+              value={formState.message}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 dark:bg-[#121826] bg-gray-50 dark:text-white text-gray-900 border dark:border-gray-700 border-gray-300 rounded focus:outline-none focus:border-blue-500 transition-colors resize-none" 
+              placeholder="Your message here..."
+            />
           </div>
           
-          {/* FormSubmit Configuration */}
-          <input type="hidden" name="_captcha" value="false" />
-          <input type="hidden" name="_subject" value="New message from your Antiportfolio!" />
+          {/* Inline Feedback Banner */}
+          <AnimatePresence>
+            {submitStatus === 'success' && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mb-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs md:text-sm flex items-center gap-2"
+              >
+                <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
+                <span>Message sent successfully! I will get back to you soon.</span>
+              </motion.div>
+            )}
+            {submitStatus === 'error' && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mb-4 p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs md:text-sm flex items-center gap-2"
+              >
+                <AlertCircle size={16} className="text-rose-400 flex-shrink-0" />
+                <span>{toastMessage}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
           
           <motion.button 
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+            whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
             type="submit" 
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-4 rounded-lg transition-colors shadow-[0_0_15px_rgba(37,99,235,0.4)]"
+            disabled={isSubmitting}
+            className={`w-full ${
+              submitStatus === 'success'
+                ? 'bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)]'
+                : 'bg-blue-600 hover:bg-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.4)]'
+            } text-white font-bold py-2.5 px-4 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70`}
           >
-            Send Message
+            {isSubmitting ? (
+              <>
+                <Loader2 size={18} className="animate-spin" />
+                <span>Sending Message...</span>
+              </>
+            ) : submitStatus === 'success' ? (
+              <>
+                <CheckCircle2 size={18} />
+                <span>Message Sent Successfully!</span>
+              </>
+            ) : (
+              <span>Send Message</span>
+            )}
           </motion.button>
         </motion.form>
 
@@ -648,6 +777,46 @@ const Home = () => {
           © {new Date().getFullYear()} Dikshit Ghimire. All rights reserved.
         </p>
       </section>
+
+      {/* Floating Success / Error Notification Toast */}
+      <AnimatePresence>
+        {submitStatus && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 30, scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 450, damping: 30 }}
+            className={`fixed bottom-6 right-6 z-50 max-w-md p-4 rounded-2xl border shadow-2xl backdrop-blur-md flex items-start gap-3.5 ${
+              submitStatus === 'success'
+                ? 'dark:bg-[#121826]/95 bg-white/95 dark:border-emerald-500/40 border-emerald-500/30 shadow-[0_10px_35px_rgba(16,185,129,0.25)]'
+                : 'dark:bg-[#121826]/95 bg-white/95 dark:border-rose-500/40 border-rose-500/30 shadow-[0_10px_35px_rgba(244,63,94,0.25)]'
+            }`}
+          >
+            <div className={`p-2 rounded-xl ${
+              submitStatus === 'success' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'
+            } flex-shrink-0`}>
+              {submitStatus === 'success' ? <CheckCircle2 size={22} className="text-emerald-400" /> : <AlertCircle size={22} className="text-rose-400" />}
+            </div>
+            
+            <div className="flex-1 pr-1">
+              <h4 className="font-bold text-sm dark:text-white text-gray-900">
+                {submitStatus === 'success' ? 'Message Sent Successfully! 🚀' : 'Submission Failed'}
+              </h4>
+              <p className="text-xs dark:text-gray-300 text-gray-600 mt-1 leading-relaxed">
+                {toastMessage}
+              </p>
+            </div>
+
+            <button
+              onClick={() => setSubmitStatus(null)}
+              className="text-gray-400 hover:text-gray-200 transition-colors p-1 rounded-lg hover:bg-gray-500/10 cursor-pointer"
+              aria-label="Close notification"
+            >
+              <X size={16} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
