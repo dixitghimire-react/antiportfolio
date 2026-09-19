@@ -112,6 +112,18 @@ const themeStyles = {
     codeBtn: 'dark:border-amber-700/60 border-amber-300 hover:border-amber-400 dark:text-gray-200 text-gray-800 hover:text-amber-400',
     bullet: 'text-amber-400',
     tag: 'text-amber-400 border dark:border-amber-500/20 border-amber-500/10'
+  },
+  emerald: {
+    border: 'dark:border-emerald-500/40 border-emerald-500/30',
+    glow: 'bg-emerald-500/10 group-hover:bg-emerald-500/25',
+    badge: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+    dot: 'bg-emerald-400',
+    titleHover: 'group-hover:text-emerald-400',
+    subtitle: 'text-emerald-500 dark:text-emerald-400',
+    primaryBtn: 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_25px_rgba(16,185,129,0.6)]',
+    codeBtn: 'dark:border-emerald-700/60 border-emerald-300 hover:border-emerald-400 dark:text-gray-200 text-gray-800 hover:text-emerald-400',
+    bullet: 'text-emerald-400',
+    tag: 'text-emerald-400 border dark:border-emerald-500/20 border-emerald-500/10'
   }
 };
 
@@ -212,6 +224,22 @@ const Home = () => {
       tags: ["Next.js 15", "React 19", "TypeScript", "Leaflet GIS", "Tailwind CSS", "Framer Motion", "GSAP"],
       liveUrl: "https://nepal-yatra-peach.vercel.app",
       githubUrl: "https://github.com/dixitghimire-react/nepal",
+      accentColor: "blue"
+    },
+    {
+      badge: "Flagship Academic Portal",
+      title: "EcoStudy",
+      subtitle: "Economics Study Portal & Learning Desk",
+      description: "A comprehensive academic study portal for Economics learners and educators built with ASP.NET Core MVC, .NET 8 LTS, Entity Framework Core, and SQL Server, featuring role-based portals and syllabus management.",
+      highlights: [
+        "Architected role-based portals for Teachers and Students with Identity authentication, CSRF anti-forgery, and seeded administrative credentials.",
+        "Implemented full chapter and syllabus CRUD workflows with duplicate detection, categorized by Microeconomics, Macroeconomics, and Money & Banking.",
+        "Engineered a study notes repository supporting multi-format uploads (.pdf, .docx, .pptx up to 25 MB) and a categorized high-yield exam question bank.",
+        "Delivered a zero-flicker dark/light mode engine, responsive off-canvas mobile navigation, and branded economics-themed error pages."
+      ],
+      tags: [".NET 8", "ASP.NET Core MVC", "C#", "EF Core 8", "SQL Server", "Bootstrap 5", "Identity Auth"],
+      docsUrl: "https://github.com/dixitghimire-react/ecostudy#readme",
+      githubUrl: "https://github.com/dixitghimire-react/ecostudy",
       accentColor: "blue"
     },
     {
@@ -605,6 +633,17 @@ const Home = () => {
                     <FaGithub size={14} />
                     <span>View Repository</span>
                   </a>
+                  {project.liveUrl && (
+                    <a 
+                      href={project.liveUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center text-emerald-500 hover:text-emerald-400 text-xs font-semibold gap-1.5 transition-colors duration-200"
+                    >
+                      <FaExternalLinkAlt size={12} />
+                      <span>Live Demo</span>
+                    </a>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -632,7 +671,7 @@ const Home = () => {
               </p>
               <p className="dark:text-gray-300 text-gray-700">
                 <strong className="font-bold dark:text-white text-gray-900 mr-2">Technologies:</strong>
-                React, Next.js, Blazor, Node, Express, Supabase, Firebase, AWS (EC2, S3, IAM, Elastic Beanstalk), Docker, Kubernetes, Git, Github Actions, Mapbox, Leaflet GIS, Tailwind CSS, Framer Motion, GSAP, PySide6 (Qt), Speech Recognition, MySQL, PostgreSQL, MongoDB, Vite, RESTful APIs, GraphQL.
+                React, Next.js, ASP.NET Core, Blazor, Node, Express, Entity Framework Core, Supabase, Firebase, AWS (EC2, S3, IAM, Elastic Beanstalk), Docker, Kubernetes, Git, Github Actions, Mapbox, Leaflet GIS, Tailwind CSS, Framer Motion, GSAP, PySide6 (Qt), Speech Recognition, SQL Server, MySQL, PostgreSQL, MongoDB, Vite, RESTful APIs, GraphQL.
               </p>
             </div>
           </motion.div>

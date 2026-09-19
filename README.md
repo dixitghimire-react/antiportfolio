@@ -16,7 +16,18 @@ A modern, responsive, and aesthetic developer portfolio showcasing full-stack pr
   - Global wishlist drawer with React Context and LocalStorage offline persistence.
   - Responsive, high-performance glassmorphic UI with smooth animations.
 
-### 2. J.A.R.V.I.S.
+### 2. EcoStudy
+**Economics Study Portal & Learning Desk**
+- **GitHub Repository**: [github.com/dixitghimire-react/ecostudy](https://github.com/dixitghimire-react/ecostudy)
+- **Tech Stack**: ASP.NET Core MVC, .NET 8 LTS, Entity Framework Core 8, SQL Server, Bootstrap 5.
+- **Key Features**:
+  - Role-based portals for Teachers and Students with ASP.NET Core Identity and CSRF validation.
+  - Full chapter and syllabus CRUD workflows with duplicate detection across Economics branches.
+  - Study notes repository with multi-format uploads (.pdf, .docx, .pptx up to 25 MB) and file management.
+  - Categorized high-yield exam question bank with difficulty tiers, marks weightage, and scoring hints.
+  - Zero-flicker dark/light mode engine, responsive off-canvas mobile drawer, and branded error pages.
+
+### 3. J.A.R.V.I.S.
 **Windows Desktop AI Voice Assistant & Automation**
 - **GitHub Repository**: [github.com/dixitghimire-react/jarvis](https://github.com/dixitghimire-react/jarvis)
 - **Tech Stack**: Python 3.11+, PySide6 (Qt), Speech Recognition, pyttsx3 (Offline TTS), OpenAI API, Windows Automation.
@@ -26,7 +37,7 @@ A modern, responsive, and aesthetic developer portfolio showcasing full-stack pr
   - Thread-safe background wake word detection ("Wake up Jarvis") and low-latency speech synthesis.
   - Native Windows Known Folders resolution, safe app automation, and two-step confirmation for critical actions.
 
-### 3. Mystic Hand (Dr. Strange VFX)
+### 4. Mystic Hand (Dr. Strange VFX)
 **Real-Time Hand Tracking & Procedural Magic VFX**
 - **GitHub Repository**: [github.com/dixitghimire-react/dr.strange](https://github.com/dixitghimire-react/dr.strange)
 - **Tech Stack**: Python 3.11+, OpenCV, MediaPipe Tasks, NumPy, Pygame, Computer Vision, Procedural VFX.
